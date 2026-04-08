@@ -143,7 +143,7 @@ MediQueue/
 
 ## Architecture
 
-![alt text](image.png)
+![alt text](diagrams/architecture/architecture.png)
 
 
 
