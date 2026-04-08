@@ -8,6 +8,16 @@ The platform enables patients to seamlessly book appointments, track their live 
 The system is built using modern web technologies and follows strong software engineering principles including Object-Oriented Programming (OOP), all five SOLID principles, and key design patterns such as Observer, Strategy, and Factory.
 
 
+<<<<<<< HEAD
+=======
+- [Project Idea](#project-idea)
+- [Core Use Cases](#core-use-cases)
+- [Current Project State](#current-project-state)
+- [Tech Stack](#tech-stack)
+- [Repository Structure](#repository-structure)
+- [Backend Architecture](#backend-architecture)
+- [Implemented Design Patterns](#implemented-design-patterns)
+>>>>>>> 3e0efac (document backend architecture and design patterns)
 
 ## Key Features
 
@@ -120,6 +130,7 @@ MediQueue/
 
 ## Database Design
 
+<<<<<<< HEAD
 ### Collections:
 
 * **Users** – Handles authentication and roles (Patient, Doctor, Admin)
@@ -239,3 +250,138 @@ This project is developed for academic and learning purposes.
 ##  Conclusion
 
 MediQueue provides a scalable and efficient solution to modernize hospital queue systems. By combining real-time updates, structured appointment handling, and strong architectural principles, it significantly improves both patient experience and hospital efficiency.
+=======
+The backend lives in [server](/Users/jagruthipulumati/Desktop/sd/MediQueue/server) and contains the architectural core of the project. This is where the hospital domain, queue behavior, design patterns, and MongoDB model definitions are currently concentrated.
+
+## Backend Architecture
+
+The backend is the center of the current implementation. It is organized to separate domain modeling, contracts, persistence, and reusable behavioral logic in a way that is easier to extend as the product grows.
+
+```text
+server/src/
+├── config/       # MongoDB connection setup
+├── entities/     # Core hospital domain classes
+├── interfaces/   # Contracts for appointments, queue, users, and notifications
+├── models/       # MongoDB Mongoose schemas
+├── patterns/     # Design pattern implementations
+├── types/        # Shared enums and reusable types
+└── index.ts      # Express server entry point
+```
+
+### Entities
+
+The entity layer captures the core business objects used to model hospital operations.
+
+Implemented entities:
+- `User`
+- `Patient`
+- `Doctor`
+- `Admin`
+- `Appointment`
+- `WalkInAppointment`
+- `ScheduledAppointment`
+- `EmergencyAppointment`
+
+These live in [server/src/entities](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/entities) and represent the business side of the system before database persistence is applied.
+
+### Interfaces
+
+The interface layer defines the contracts that shape queue management, notification delivery, appointments, and user roles.
+
+Implemented interfaces:
+- user interface
+- patient interface
+- doctor interface
+- admin interface
+- appointment interface
+- queue observer interface
+- queue subject interface
+- queue strategy interface
+- notification channel interface
+
+These live in [server/src/interfaces](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/interfaces) and help keep the backend modular and easier to evolve.
+
+### Shared Types
+
+The shared types file in [server/src/types/system.types.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/types/system.types.ts) contains the enums and reusable value types that connect the rest of the backend.
+
+It currently defines:
+- user roles
+- appointment types
+- appointment statuses
+- queue entry statuses
+- doctor availability states
+- notification types
+- case priorities
+- time slots
+- queue entries and queue snapshots
+- prescription and follow-up structures
+- doctor daily summary structure
+
+## Implemented Design Patterns
+
+One of the strongest aspects of the project is that the backend is already modeled using design patterns that fit the hospital queue and appointment domain.
+
+### Factory Pattern
+
+Implemented in [server/src/patterns/appointment_factory.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/appointment_factory.ts).
+
+This pattern is used to create the correct appointment object without spreading appointment type checks throughout the application.
+
+Included classes:
+- `WalkInFactory`
+- `ScheduledFactory`
+- `EmergencyFactory`
+- `AppointmentFactoryProvider`
+
+### Strategy Pattern
+
+Implemented in [server/src/patterns/queue_strategy.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/queue_strategy.ts).
+
+This pattern is used to support multiple queue ordering rules while keeping queue management logic independent from sorting behavior.
+
+Included strategies:
+- `FIFOQueueStrategy`
+- `PriorityQueueStrategy`
+- `RoundRobinQueueStrategy`
+
+### Observer Pattern
+
+Implemented in [server/src/patterns/queue_manager.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/queue_manager.ts) and [server/src/patterns/queue_observer.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/queue_observer.ts).
+
+This pattern is used to notify interested listeners when queue state changes.
+
+Included classes:
+- `QueueManager`
+- `PatientQueueObserver`
+- `DoctorQueueObserver`
+
+### Singleton Pattern
+
+Implemented in [server/src/patterns/queue_registry.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/queue_registry.ts).
+
+This pattern is used to maintain a single shared queue registry across the system.
+
+Included class:
+- `QueueRegistry`
+
+### Adapter Pattern
+
+Implemented in [server/src/patterns/notification_adapter.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/notification_adapter.ts).
+
+This pattern is used to normalize different notification providers under one application-facing interface.
+
+Included adapters:
+- `EmailAdapter`
+- `SmsAdapter`
+- `PushAdapter`
+
+### Composite Pattern
+
+Implemented in [server/src/patterns/notification_composite.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/notification_composite.ts).
+
+This pattern is used to send one notification event through multiple channels as a single grouped action.
+
+Included class:
+- `NotificationGroup`
+>>>>>>> 3e0efac (document backend architecture and design patterns)
