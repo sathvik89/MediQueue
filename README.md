@@ -14,6 +14,7 @@ The project is centered on one idea: turn fragmented appointment and queue handl
 - [Project Idea](#project-idea)
 - [Core Use Cases](#core-use-cases)
 - [Current Project State](#current-project-state)
+- [Tech Stack](#tech-stack)
 - [Repository Structure](#repository-structure)
 
 ## Project Idea
@@ -72,6 +73,34 @@ The repository currently contains a stronger backend foundation than frontend pr
 - The frontend is still at starter level and is not yet connected to the backend domain flow
 - API routes, controllers, services, validation, and authentication flow are not fully built out yet
 - End-to-end hospital workflows are modeled in code, but not yet exposed through a complete application interface
+
+## Tech Stack
+
+### Frontend
+
+- React
+- TypeScript
+- Vite
+- Axios
+- ESLint
+
+### Backend
+
+- Node.js
+- Express
+- TypeScript
+- MongoDB
+- Mongoose
+
+### Design and Documentation
+
+- Use case diagrams
+- Class diagrams
+- Sequence diagrams
+- ER diagrams
+- Object-oriented design
+- SOLID-oriented structure
+- design pattern based backend modeling
 
 ## Repository Structure
 
