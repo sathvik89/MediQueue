@@ -5,14 +5,16 @@
 [![Node.js](https://img.shields.io/badge/Backend-Node.js%20%2B%20Express-43853d)](./server)
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB%20%2B%20Mongoose-47a248)](./server/src/models)
 
-MediQueue is a smart hospital queue and appointment management system designed to digitize appointment booking, queue handling, consultation flow, and hospital-side coordination. The project centers on one idea: turn fragmented manual hospital operations into a structured digital workflow that is easier to manage, easier to extend, and easier to understand in code.
+MediQueue is a smart hospital queue and appointment management system focused on digitizing appointment booking, queue handling, consultation flow, and hospital-side coordination.
 
-The current repository is strongest on the backend side. Its main value today lies in the domain modeling, design-pattern-driven architecture, and MongoDB-ready data layer that support the core hospital use cases.
+The core idea of the project is simple: replace fragmented manual hospital workflows with a structured digital system that is easier to manage, easier to extend, and easier to reason about in code.
+
+At the current stage of the repository, the backend is the strongest and most important part of the implementation.
 
 ## Table of Contents
 
 - [Project Idea](#project-idea)
-- [Core Actors and Use Cases](#core-actors-and-use-cases)
+- [Actors and Use Cases](#actors-and-use-cases)
 - [Current Project State](#current-project-state)
 - [Tech Stack](#tech-stack)
 - [Repository Structure](#repository-structure)
@@ -27,24 +29,27 @@ The current repository is strongest on the backend side. Its main value today li
 
 ## Project Idea
 
-MediQueue models a hospital workflow with three primary actors:
+MediQueue models a hospital workflow around three primary actors:
 
-- `Patient`: register, log in, book appointments, track queue position, receive notifications, reschedule or cancel appointments, and view appointment history
-- `Doctor`: manage availability, review the live queue, call the next patient, view patient details, write prescriptions, recommend follow-ups, mark consultations complete, and flag critical cases
-- `Admin`: manage doctors, configure operational settings, view system-wide activity, and handle exceptional scheduling cases
+- `Patient`
+- `Doctor`
+- `Admin`
 
-The goal is not only to store hospital data, but to represent hospital behavior through a clean software architecture. That is why the project combines domain entities, explicit interfaces, reusable types, design patterns, and persistence models instead of relying only on plain CRUD structures.
+The system is intended to support booking, queue visibility, consultation handling, notifications, patient history, doctor availability, and admin-side operational control.
 
-## Core Actors and Use Cases
+This project is not just about storing data. It is designed around domain entities, interfaces, reusable types, design patterns, and MongoDB models so that the hospital workflow is represented clearly in the codebase.
+
+## Actors and Use Cases
 
 ### Patient
 
 - Register and log in
 - Select a doctor and choose a time slot
-- Book scheduled, walk-in, or emergency appointments
+- Book appointments
 - View queue position
-- Receive queue updates and reminders
-- Reschedule or cancel appointments
+- Receive notifications
+- Reschedule appointments
+- Cancel appointments
 - View appointment history
 
 ### Doctor
@@ -72,24 +77,23 @@ The goal is not only to store hospital data, but to represent hospital behavior 
 
 The repository currently has a much stronger backend foundation than frontend product implementation.
 
-### What is implemented
+### Implemented
 
-- A TypeScript backend structure
-- Express application bootstrap
-- MongoDB connection setup using Mongoose
+- Express server bootstrap
+- MongoDB connection setup with Mongoose
 - Domain entities for users and appointments
-- Interfaces for queue, users, appointments, and notifications
-- Reusable shared system enums and value types
+- Interfaces for users, appointments, queue flow, and notifications
+- Shared enums and reusable system types
 - Design pattern implementations for queue handling, notifications, and appointment creation
-- MongoDB model definitions for the main hospital data objects
+- MongoDB models for the main hospital data objects
 - UML and system analysis diagrams
 
-### What is still early-stage
+### Still in Progress
 
-- The frontend is still a starter-level React and Vite shell
+- Frontend is still an early React and Vite shell
 - API routes, controllers, and services are not fully implemented yet
-- Authentication flow is not fully built out in the current codebase
-- End-to-end hospital workflows are modeled in code but not yet exposed as a complete application experience
+- Authentication flow is not fully built in the current codebase
+- End-to-end workflows are modeled in code but not yet exposed through a complete application flow
 
 ## Tech Stack
 
@@ -109,7 +113,7 @@ The repository currently has a much stronger backend foundation than frontend pr
 - MongoDB
 - Mongoose
 
-### Design and Documentation
+### Design
 
 - Object-oriented design
 - SOLID-oriented structure
@@ -130,146 +134,21 @@ MediQueue/
 
 ### Frontend
 
-The frontend lives in [client](/Users/jagruthipulumati/Desktop/sd/MediQueue/client). It is currently a lightweight React + Vite setup and should be viewed as the starting shell for the eventual hospital interface, not as the finished user-facing product.
+The frontend lives in [`client`](./client). It is currently a lightweight React + Vite setup and should be treated as the starting shell for the future hospital interface.
 
 ### Backend
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-### Collections:
-
-* **Users** – Handles authentication and roles (Patient, Doctor, Admin)
-* **DoctorSchedules** – Stores availability and blocked time slots
-* **Appointments** – Core queue and booking data
-* **MedicalRecords** – Prescriptions, diagnosis, and history
-* **SystemSettings** – Global configuration
-
-
-
-## Architecture
-
-![alt text](diagrams/architecture/architecture.png)
-
-
-
-## Design Principles & Patterns
-
-### SOLID Principles
-
-* **Single Responsibility Principle** – Separate services for authentication, appointments, notifications
-* **Open/Closed Principle** – Easy to extend (e.g., adding new notification channels)
-* **Liskov Substitution Principle** – Flexible role-based architecture
-* **Interface Segregation Principle** – Clean separation of interfaces
-* **Dependency Inversion Principle** – Services depend on abstractions
-
-### Design Patterns
-
-* **Observer Pattern**
-  Used for real-time queue updates and notifications
-
-* **Strategy Pattern**
-  Enables flexible queue handling (FIFO, priority-based)
-
-* **Factory Pattern**
-  Used for scalable creation of appointment types
-
-
-
-## Setup & Installation
-
-### Prerequisites
-
-* Node.js installed
-* MongoDB installed or cloud instance (MongoDB Atlas)
-* Git installed
-
-### Clone the Repository
-
-```
-git clone https://github.com/your-username/MediQueue.git
-cd MediQueue
-```
-
-
-
-## ▶️ Running the Project
-
-### Backend Setup
-
-```
-cd server
-npm install
-npm run dev
-```
-
-### Frontend Setup
-
-```
-cd client
-npm install
-npm start
-```
-
-
-
-## Environment Variables
-
-Create a `.env` file in the server directory:
-
-```
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-```
-
-
-
-## Scalability & Future Scope
-
-* Load balancing across multiple doctors
-* Caching for queue prediction and wait time estimation
-* Integration with SMS/WhatsApp notifications
-* Multi-hospital support
-* AI-based patient prioritization
-
-
-
-## 👥 Team Members & Contributions
-
-| Name                | Contribution                                                                 |
-|---------------------|------------------------------------------------------------------------------|
-| Koriginja Sathvik   | Led system design, developed the complete codebase, and defined overall architecture |
-| Pulumati Jagruthi   | Created system diagrams(usecase & class), managed GitHub repository, and designed interfaces  |
-| Rashmi Anand        | Worked on system diagrams(ER & sequence) and defined entity structures within the codebase  |
-| Kasula Lalithendra  | Contributed to development tasks and supported implementation across modules |
-| Nachiket            | Assisted in development, integration, and overall project support            |
-
-
-
-## 📄 License
-
-This project is developed for academic and learning purposes.
-
-
-
-##  Conclusion
-
-MediQueue provides a scalable and efficient solution to modernize hospital queue systems. By combining real-time updates, structured appointment handling, and strong architectural principles, it significantly improves both patient experience and hospital efficiency.
-=======
-The backend lives in [server](/Users/jagruthipulumati/Desktop/sd/MediQueue/server) and contains the architectural core of the project. This is where the hospital domain, queue behavior, design patterns, and MongoDB model definitions are currently concentrated.
-=======
-The backend lives in [server](/Users/jagruthipulumati/Desktop/sd/MediQueue/server). This is the most important and most developed part of the current project. It contains the domain model, queue behavior, design patterns, and MongoDB model layer that define the system architecture.
->>>>>>> 653ac0d (readme updated v3)
+The backend lives in [`server`](./server). This is the most developed part of the current project and contains the domain model, queue behavior, design patterns, and MongoDB model layer.
 
 ## Backend Architecture
 
-The backend is organized to separate domain logic, contracts, persistence, and reusable behavior.
+The backend is organized to keep domain logic, contracts, persistence, and reusable behavior clearly separated.
 
 ```text
 server/src/
 ├── config/       # MongoDB connection setup
 ├── entities/     # Core hospital domain classes
-├── interfaces/   # Contracts for appointments, queue, users, and notifications
+├── interfaces/   # Contracts for users, appointments, queue, and notifications
 ├── models/       # MongoDB Mongoose schemas
 ├── patterns/     # Design pattern implementations
 ├── types/        # Shared enums and reusable types
@@ -278,9 +157,7 @@ server/src/
 
 ### Entities
 
-The entity layer captures the core business objects used to model hospital operations.
-
-Implemented entities:
+Implemented in [`server/src/entities`](./server/src/entities):
 
 - `User`
 - `Patient`
@@ -291,13 +168,11 @@ Implemented entities:
 - `ScheduledAppointment`
 - `EmergencyAppointment`
 
-These live in [server/src/entities](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/entities) and represent the business side of the system before persistence concerns are introduced.
+These classes represent the business side of the system before persistence concerns are applied.
 
 ### Interfaces
 
-The interface layer defines the contracts that shape queue management, notification delivery, appointments, and user roles.
-
-Implemented interfaces:
+Implemented in [`server/src/interfaces`](./server/src/interfaces):
 
 - user interface
 - patient interface
@@ -309,13 +184,11 @@ Implemented interfaces:
 - queue strategy interface
 - notification channel interface
 
-These live in [server/src/interfaces](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/interfaces) and help keep the backend modular, readable, and easier to evolve.
+These contracts keep the backend modular and easier to extend.
 
 ### Shared Types
 
-The shared types file in [server/src/types/system.types.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/types/system.types.ts) connects the rest of the backend through common enums and reusable value types.
-
-It currently defines:
+Defined in [`server/src/types/system.types.ts`](./server/src/types/system.types.ts):
 
 - user roles
 - appointment types
@@ -326,16 +199,16 @@ It currently defines:
 - case priorities
 - time slots
 - queue entries and queue snapshots
-- prescriptions and follow-up structures
-- doctor daily summary structure
+- prescription and follow-up structures
+- daily summary structure
 
 ## Implemented Design Patterns
 
-One of the strongest parts of the project is that the backend is not just a CRUD scaffold. It already applies multiple design patterns that fit the hospital queue and appointment domain.
+The backend is one of the strongest parts of the repository because it already applies multiple design patterns that fit the hospital queue and appointment domain.
 
 ### Factory Pattern
 
-Implemented in [server/src/patterns/appointment_factory.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/appointment_factory.ts).
+Implemented in [`server/src/patterns/appointment_factory.ts`](./server/src/patterns/appointment_factory.ts).
 
 Purpose:
 
@@ -351,7 +224,7 @@ Included classes:
 
 ### Strategy Pattern
 
-Implemented in [server/src/patterns/queue_strategy.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/queue_strategy.ts).
+Implemented in [`server/src/patterns/queue_strategy.ts`](./server/src/patterns/queue_strategy.ts).
 
 Purpose:
 
@@ -366,7 +239,7 @@ Included strategies:
 
 ### Observer Pattern
 
-Implemented in [server/src/patterns/queue_manager.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/queue_manager.ts) and [server/src/patterns/queue_observer.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/queue_observer.ts).
+Implemented in [`server/src/patterns/queue_manager.ts`](./server/src/patterns/queue_manager.ts) and [`server/src/patterns/queue_observer.ts`](./server/src/patterns/queue_observer.ts).
 
 Purpose:
 
@@ -381,7 +254,7 @@ Included classes:
 
 ### Singleton Pattern
 
-Implemented in [server/src/patterns/queue_registry.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/queue_registry.ts).
+Implemented in [`server/src/patterns/queue_registry.ts`](./server/src/patterns/queue_registry.ts).
 
 Purpose:
 
@@ -393,7 +266,7 @@ Included class:
 
 ### Adapter Pattern
 
-Implemented in [server/src/patterns/notification_adapter.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/notification_adapter.ts).
+Implemented in [`server/src/patterns/notification_adapter.ts`](./server/src/patterns/notification_adapter.ts).
 
 Purpose:
 
@@ -407,7 +280,7 @@ Included adapters:
 
 ### Composite Pattern
 
-Implemented in [server/src/patterns/notification_composite.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/patterns/notification_composite.ts).
+Implemented in [`server/src/patterns/notification_composite.ts`](./server/src/patterns/notification_composite.ts).
 
 Purpose:
 
@@ -419,11 +292,11 @@ Included class:
 
 ## Data Models
 
-The MongoDB persistence layer lives in [server/src/models](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/models) and maps the hospital domain into storage-ready schemas.
+The MongoDB persistence layer lives in [`server/src/models`](./server/src/models).
 
 ### User Model
 
-Defined in [server/src/models/user_model.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/models/user_model.ts).
+Defined in [`server/src/models/user_model.ts`](./server/src/models/user_model.ts).
 
 Supports:
 
@@ -436,7 +309,7 @@ Supports:
 
 ### Appointment Model
 
-Defined in [server/src/models/appointment_model.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/models/appointment_model.ts).
+Defined in [`server/src/models/appointment_model.ts`](./server/src/models/appointment_model.ts).
 
 Supports:
 
@@ -449,18 +322,18 @@ Supports:
 
 ### Queue Model
 
-Defined in [server/src/models/queue_model.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/models/queue_model.ts).
+Defined in [`server/src/models/queue_model.ts`](./server/src/models/queue_model.ts).
 
 Supports:
 
 - per-doctor queue storage
 - daily queue snapshots for each doctor
 - live queue entries with token number, status, and priority
-- tracking of waiting, called, in-progress, done, and missed patients
+- waiting, called, in-progress, done, and missed patient states
 
 ### Notification Model
 
-Defined in [server/src/models/notification_model.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/models/notification_model.ts).
+Defined in [`server/src/models/notification_model.ts`](./server/src/models/notification_model.ts).
 
 Supports:
 
@@ -468,11 +341,11 @@ Supports:
 - appointment reminders
 - follow-up notifications
 - general system messages
-- read and unread notification tracking
+- read and unread tracking
 
 ### Medical Record Model
 
-Defined in [server/src/models/medical_record_model.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/models/medical_record_model.ts).
+Defined in [`server/src/models/medical_record_model.ts`](./server/src/models/medical_record_model.ts).
 
 Supports:
 
@@ -485,7 +358,7 @@ Supports:
 
 ### System Setting Model
 
-Defined in [server/src/models/system_setting_model.ts](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src/models/system_setting_model.ts).
+Defined in [`server/src/models/system_setting_model.ts`](./server/src/models/system_setting_model.ts).
 
 Supports:
 
@@ -531,7 +404,7 @@ npm install
 
 ### Server
 
-Run these commands from [server](/Users/jagruthipulumati/Desktop/sd/MediQueue/server):
+Run these commands from [`server`](./server):
 
 ```bash
 npm run dev
@@ -541,7 +414,7 @@ npm run typecheck
 
 ### Client
 
-Run these commands from [client](/Users/jagruthipulumati/Desktop/sd/MediQueue/client):
+Run these commands from [`client`](./client):
 
 ```bash
 npm run dev
@@ -552,7 +425,7 @@ npm run preview
 
 ## Environment Variables
 
-Create a `.env` file inside [server/src](/Users/jagruthipulumati/Desktop/sd/MediQueue/server/src).
+Create a `.env` file inside `server/src`.
 
 Example:
 
@@ -563,14 +436,12 @@ MONGO_URI=your_mongodb_connection_string
 
 ## Project Diagrams
 
-The repository already includes system diagrams that support the design and documentation of the project:
+The repository includes supporting diagrams for system understanding and documentation:
 
-- use case diagrams in [diagrams/usecase](/Users/jagruthipulumati/Desktop/sd/MediQueue/diagrams/usecase)
-- class diagrams in [diagrams/class](/Users/jagruthipulumati/Desktop/sd/MediQueue/diagrams/class)
-- sequence diagrams in [diagrams/sequence](/Users/jagruthipulumati/Desktop/sd/MediQueue/diagrams/sequence)
-- ER diagrams in [diagrams/er_diagram](/Users/jagruthipulumati/Desktop/sd/MediQueue/diagrams/er_diagram)
-
-These diagrams help explain the intended product behavior, object relationships, and database direction behind the implementation.
+- use case diagrams in [`diagrams/usecase`](./diagrams/usecase)
+- class diagrams in [`diagrams/class`](./diagrams/class)
+- sequence diagrams in [`diagrams/sequence`](./diagrams/sequence)
+- ER diagrams in [`diagrams/er_diagram`](./diagrams/er_diagram)
 
 ## Roadmap
 
@@ -580,9 +451,19 @@ Possible next steps for the project include:
 - connect the frontend to real backend workflows
 - build authentication and authorization flows
 - add validation and error handling layers
-- implement system overview analytics for admin workflows
+- implement admin system overview analytics
 - integrate real notification providers
 - expand queue and scheduling conflict resolution logic
+
+## Team Contributions
+
+| Name | Contribution |
+| --- | --- |
+| Koriginja Sathvik | Led system design, developed the codebase, and defined the overall architecture |
+| Pulumati Jagruthi | Created system diagrams, managed the GitHub repository, and designed interfaces |
+| Rashmi Anand | Worked on ER and sequence diagrams and contributed to entity structure definition |
+| Kasula Lalithendra | Contributed to development tasks and supported implementation across modules |
+| Nachiket | Assisted with development, integration, and overall project support |
 
 ## Conclusion
 
