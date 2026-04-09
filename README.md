@@ -140,14 +140,16 @@ server/src/
 
 Implemented in [`server/src/entities`](./server/src/entities):
 
-- `User`
-- `Patient`
-- `Doctor`
-- `Admin`
-- `Appointment`
-- `WalkInAppointment`
-- `ScheduledAppointment`
-- `EmergencyAppointment`
+| Entity | Role in the System |
+| --- | --- |
+| `User` | Base user abstraction for the system |
+| `Patient` | Represents patient-specific information and behavior |
+| `Doctor` | Represents doctor-specific information, availability, and consultation behavior |
+| `Admin` | Represents administrative users and system-level control |
+| `Appointment` | Base abstraction for appointment flow |
+| `WalkInAppointment` | Appointment type for walk-in visits |
+| `ScheduledAppointment` | Appointment type for scheduled visits |
+| `EmergencyAppointment` | Appointment type for emergency visits |
 
 These classes represent the business side of the system before persistence concerns are applied.
 
@@ -155,15 +157,17 @@ These classes represent the business side of the system before persistence conce
 
 Implemented in [`server/src/interfaces`](./server/src/interfaces):
 
-- user interface
-- patient interface
-- doctor interface
-- admin interface
-- appointment interface
-- queue observer interface
-- queue subject interface
-- queue strategy interface
-- notification channel interface
+| Interface | Responsibility |
+| --- | --- |
+| `user_interface` | Defines the common structure for system users |
+| `patient_interface` | Defines patient-specific fields and behavior |
+| `doctor_interface` | Defines doctor-specific fields and behavior |
+| `admin_interface` | Defines admin-specific fields and system actions |
+| `appointment_interface` | Defines the contract for appointment objects |
+| `queue_observer_interface` | Defines how queue observers receive updates |
+| `queue_subject_interface` | Defines how queue subjects manage observers |
+| `queue_strategy_interface` | Defines the contract for queue ordering strategies |
+| `notification_interface` | Defines the contract for notification channels |
 
 These contracts keep the backend modular and easier to extend.
 
@@ -171,17 +175,19 @@ These contracts keep the backend modular and easier to extend.
 
 Defined in [`server/src/types/system.types.ts`](./server/src/types/system.types.ts):
 
-- user roles
-- appointment types
-- appointment statuses
-- queue entry statuses
-- doctor availability states
-- notification types
-- case priorities
-- time slots
-- queue entries and queue snapshots
-- prescription and follow-up structures
-- daily summary structure
+| Type Group | Purpose |
+| --- | --- |
+| User roles | Distinguish patient, doctor, and admin users |
+| Appointment types | Distinguish walk-in, scheduled, and emergency appointments |
+| Appointment statuses | Track the appointment lifecycle |
+| Queue entry statuses | Track patient state inside the queue |
+| Doctor availability states | Track doctor availability and working condition |
+| Notification types | Categorize notification events |
+| Case priorities | Support emergency and priority-based handling |
+| Time slots | Represent appointment and availability time windows |
+| Queue entries and queue snapshots | Represent live queue state |
+| Prescription and follow-up structures | Represent treatment output after consultation |
+| Daily summary structure | Represent doctor-level summary data |
 
 ## Implemented Design Patterns
 
@@ -284,26 +290,15 @@ npm install
 
 ## Available Commands
 
-### Server
-
-Run these commands from [`server`](./server):
-
-```bash
-npm run dev
-npm run build
-npm run typecheck
-```
-
-### Client
-
-Run these commands from [`client`](./client):
-
-```bash
-npm run dev
-npm run build
-npm run lint
-npm run preview
-```
+| Workspace | Command | Purpose |
+| --- | --- | --- |
+| `server` | `npm run dev` | Run the backend in development mode |
+| `server` | `npm run build` | Compile the backend TypeScript output |
+| `server` | `npm run typecheck` | Run backend TypeScript checks without emitting files |
+| `client` | `npm run dev` | Run the frontend in development mode |
+| `client` | `npm run build` | Build the frontend project |
+| `client` | `npm run lint` | Run frontend lint checks |
+| `client` | `npm run preview` | Preview the built frontend locally |
 
 ## Environment Variables
 
