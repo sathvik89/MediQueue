@@ -187,14 +187,35 @@ Defined in [`server/src/types/system.types.ts`](./server/src/types/system.types.
 
 The backend is one of the strongest parts of the repository because it already applies multiple design patterns that fit the hospital queue and appointment domain.
 
-| Pattern | Files | Purpose | Main Classes |
-| --- | --- | --- | --- |
-| Factory | [`server/src/patterns/appointment_factory.ts`](./server/src/patterns/appointment_factory.ts) | Create the correct appointment object based on appointment type without spreading conditional creation logic | `WalkInFactory`, `ScheduledFactory`, `EmergencyFactory`, `AppointmentFactoryProvider` |
-| Strategy | [`server/src/patterns/queue_strategy.ts`](./server/src/patterns/queue_strategy.ts) | Allow queue ordering rules to change without rewriting queue manager logic | `FIFOQueueStrategy`, `PriorityQueueStrategy`, `RoundRobinQueueStrategy` |
-| Observer | [`server/src/patterns/queue_manager.ts`](./server/src/patterns/queue_manager.ts), [`server/src/patterns/queue_observer.ts`](./server/src/patterns/queue_observer.ts) | Notify observers when queue state changes while keeping queue logic decoupled | `QueueManager`, `PatientQueueObserver`, `DoctorQueueObserver` |
-| Singleton | [`server/src/patterns/queue_registry.ts`](./server/src/patterns/queue_registry.ts) | Maintain one shared registry of doctor queues across the application | `QueueRegistry` |
-| Adapter | [`server/src/patterns/notification_adapter.ts`](./server/src/patterns/notification_adapter.ts) | Normalize different notification providers behind one application-facing contract | `EmailAdapter`, `SmsAdapter`, `PushAdapter` |
-| Composite | [`server/src/patterns/notification_composite.ts`](./server/src/patterns/notification_composite.ts) | Send one notification event through multiple channels as a grouped action | `NotificationGroup` |
+**Factory Pattern**  
+File: [`server/src/patterns/appointment_factory.ts`](./server/src/patterns/appointment_factory.ts)  
+Purpose: Create the correct appointment object based on appointment type without spreading conditional creation logic  
+Main classes: `WalkInFactory`, `ScheduledFactory`, `EmergencyFactory`, `AppointmentFactoryProvider`
+
+**Strategy Pattern**  
+File: [`server/src/patterns/queue_strategy.ts`](./server/src/patterns/queue_strategy.ts)  
+Purpose: Allow queue ordering rules to change without rewriting queue manager logic  
+Main classes: `FIFOQueueStrategy`, `PriorityQueueStrategy`, `RoundRobinQueueStrategy`
+
+**Observer Pattern**  
+File: [`server/src/patterns/queue_manager.ts`](./server/src/patterns/queue_manager.ts), [`server/src/patterns/queue_observer.ts`](./server/src/patterns/queue_observer.ts)  
+Purpose: Notify observers when queue state changes while keeping queue logic decoupled  
+Main classes: `QueueManager`, `PatientQueueObserver`, `DoctorQueueObserver`
+
+**Singleton Pattern**  
+File: [`server/src/patterns/queue_registry.ts`](./server/src/patterns/queue_registry.ts)  
+Purpose: Maintain one shared registry of doctor queues across the application  
+Main classes: `QueueRegistry`
+
+**Adapter Pattern**  
+File: [`server/src/patterns/notification_adapter.ts`](./server/src/patterns/notification_adapter.ts)  
+Purpose: Normalize different notification providers behind one application-facing contract  
+Main classes: `EmailAdapter`, `SmsAdapter`, `PushAdapter`
+
+**Composite Pattern**  
+File: [`server/src/patterns/notification_composite.ts`](./server/src/patterns/notification_composite.ts)  
+Purpose: Send one notification event through multiple channels as a grouped action  
+Main classes: `NotificationGroup`
 
 ## Data Models
 
