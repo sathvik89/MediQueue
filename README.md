@@ -47,37 +47,20 @@ This project is not just about storing data. It is designed around domain entiti
 
 ## Actors and Use Cases
 
-### Patient
+## System Roles & Functionalities
 
-- Register and log in
-- Select a doctor and choose a time slot
-- Book appointments
-- View queue position
-- Receive notifications
-- Reschedule appointments
-- Cancel appointments
-- View appointment history
-
-### Doctor
-
-- Set availability
-- Block time for breaks or emergencies
-- View today's queue
-- Call the next patient
-- View patient details
-- Write prescriptions
-- Recommend follow-ups
-- Mark consultation complete
-- Review patient history
-- Flag critical cases
-
-### Admin
-
-- Add or remove doctors
-- Configure consultation rules and working hours
-- View system overview
-- Handle scheduling conflicts
-- Override appointment cancellations when needed
+| Patient | Doctor | Admin |
+|--------|--------|-------|
+| Register and login | Set availability | Add or remove doctors |
+| Select doctor & time slot | Block time (breaks/emergencies) | Configure consultation rules & hours |
+| Book appointments | View today's queue | View system overview |
+| View queue position | Call next patient | Handle scheduling conflicts |
+| Receive notifications | View patient details | Override appointment cancellations |
+| Reschedule appointments | Write prescriptions |  |
+| Cancel appointments | Recommend follow-ups |  |
+| View appointment history | Mark consultation complete |  |
+|  | Review patient history |  |
+|  | Flag critical cases |  |
 
 ## Current Project State
 
@@ -103,21 +86,13 @@ The repository currently has a much stronger backend foundation than frontend pr
 
 ## Tech Stack
 
-### Frontend
-
-- React
-- TypeScript
-- Vite
-- Axios
-- ESLint
-
-### Backend
-
-- Node.js
-- Express
-- TypeScript
-- MongoDB
-- Mongoose
+| Frontend        | Backend        |
+|:----------------|:---------------|
+| React           | Node.js        |
+| TypeScript      | Express        |
+| Vite            | TypeScript     |
+| Axios           | MongoDB        |
+| ESLint          | Mongoose       |
 
 ### Design
 
