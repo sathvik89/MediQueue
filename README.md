@@ -334,14 +334,13 @@ Possible next steps for the project include:
 
 ## Team Contributions
 
-```mermaid
-pie title Team Contribution Areas
-    "Sathvik" : 26
-    "Jagruthi" : 22
-    "Lalith" : 19
-    "Nachiketh" : 17
-    "Rashmi" : 16
-```
+| Team Member | Primary Contribution Areas |
+| --- | --- |
+| Sathvik | System design, interfaces, entities, design patterns, architecture, backend and frontend flow support |
+| Jagruthi | Database configuration, model and schema identification, documentation, README, frontend and backend contribution, use case diagrams |
+| Lalith | Design patterns, ER diagrams, backend integration, implementation support |
+| Nachiketh | Database modeling, class diagrams, frontend development, backend support |
+| Rashmi | Sequence diagrams, entities, frontend and backend support |
 
 <details>
 <summary><strong>Sathvik</strong></summary>
