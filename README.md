@@ -334,13 +334,49 @@ Possible next steps for the project include:
 
 ## Team Contributions
 
-| Name | Contribution |
-| --- | --- |
-| Koriginja Sathvik | Led system design, developed the codebase, and defined the overall architecture |
-| Pulumati Jagruthi | Created system diagrams, managed the GitHub repository, and designed interfaces |
-| Rashmi Anand | Designed system workflows, developed sequence & ER diagrams, defined entity relationships, and contributed to implementation logic |
-| Kasula Lalithendra | Contributed to development tasks and supported implementation across modules |
-| Nachiket | Assisted with development, integration, and overall project support |
+```mermaid
+pie title Team Contribution Areas
+    "Sathvik" : 26
+    "Jagruthi" : 22
+    "Lalith" : 19
+    "Nachiketh" : 17
+    "Rashmi" : 16
+```
+
+<details>
+<summary><strong>Sathvik</strong></summary>
+
+Led the overall system design, defined interfaces and entities, applied design patterns, set up the development code structure and project architecture, worked on use case diagram version 2, and supported backend and frontend implementation flow and connections.
+
+</details>
+
+<details>
+<summary><strong>Jagruthi</strong></summary>
+
+Managed database configuration, identified models and schemas, prepared project documentation including the README, contributed to frontend and backend development, and worked on use case diagrams.
+
+</details>
+
+<details>
+<summary><strong>Lalith</strong></summary>
+
+Worked on design patterns, ER diagrams, backend integration, and implementation support.
+
+</details>
+
+<details>
+<summary><strong>Nachiketh</strong></summary>
+
+Responsible for database modeling, class diagrams, frontend development, and backend support.
+
+</details>
+
+<details>
+<summary><strong>Rashmi</strong></summary>
+
+Created sequence diagrams, worked on entities, and supported both frontend and backend development.
+
+</details>
 
 ## Conclusion
 
