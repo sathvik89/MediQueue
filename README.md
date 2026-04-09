@@ -39,6 +39,12 @@ The system is intended to support booking, queue visibility, consultation handli
 
 This project is not just about storing data. It is designed around domain entities, interfaces, reusable types, design patterns, and MongoDB models so that the hospital workflow is represented clearly in the codebase.
 
+## System Architecture
+
+<p align="center">
+  <img src="./diagrams/architecture/architecture.png" alt="MediQueue Architecture" width="700"/>
+</p>
+
 ## Actors and Use Cases
 
 ### Patient
@@ -461,7 +467,7 @@ Possible next steps for the project include:
 | --- | --- |
 | Koriginja Sathvik | Led system design, developed the codebase, and defined the overall architecture |
 | Pulumati Jagruthi | Created system diagrams, managed the GitHub repository, and designed interfaces |
-| Rashmi Anand | Worked on ER and sequence diagrams and contributed to entity structure definition |
+| Rashmi Anand | Designed system workflows, developed sequence & ER diagrams, defined entity relationships, and contributed to implementation logic |
 | Kasula Lalithendra | Contributed to development tasks and supported implementation across modules |
 | Nachiket | Assisted with development, integration, and overall project support |
 
