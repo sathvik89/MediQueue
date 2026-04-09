@@ -187,168 +187,48 @@ Defined in [`server/src/types/system.types.ts`](./server/src/types/system.types.
 
 The backend is one of the strongest parts of the repository because it already applies multiple design patterns that fit the hospital queue and appointment domain.
 
-### Factory Pattern
-
-Implemented in [`server/src/patterns/appointment_factory.ts`](./server/src/patterns/appointment_factory.ts).
-
-Purpose:
-
-- create the correct appointment object based on appointment type
-- avoid scattering appointment type checks throughout the application
-
-Included classes:
-
-- `WalkInFactory`
-- `ScheduledFactory`
-- `EmergencyFactory`
-- `AppointmentFactoryProvider`
-
-### Strategy Pattern
-
-Implemented in [`server/src/patterns/queue_strategy.ts`](./server/src/patterns/queue_strategy.ts).
-
-Purpose:
-
-- allow queue ordering rules to change without rewriting queue manager logic
-- support FIFO, priority-based handling, and round-robin style ordering
-
-Included strategies:
-
-- `FIFOQueueStrategy`
-- `PriorityQueueStrategy`
-- `RoundRobinQueueStrategy`
-
-### Observer Pattern
-
-Implemented in [`server/src/patterns/queue_manager.ts`](./server/src/patterns/queue_manager.ts) and [`server/src/patterns/queue_observer.ts`](./server/src/patterns/queue_observer.ts).
-
-Purpose:
-
-- notify observers when queue state changes
-- support patient and doctor queue updates without tightly coupling queue logic to UI concerns
-
-Included classes:
-
-- `QueueManager`
-- `PatientQueueObserver`
-- `DoctorQueueObserver`
-
-### Singleton Pattern
-
-Implemented in [`server/src/patterns/queue_registry.ts`](./server/src/patterns/queue_registry.ts).
-
-Purpose:
-
-- maintain one shared registry of doctor queues across the application
-
-Included class:
-
-- `QueueRegistry`
-
-### Adapter Pattern
-
-Implemented in [`server/src/patterns/notification_adapter.ts`](./server/src/patterns/notification_adapter.ts).
-
-Purpose:
-
-- normalize different notification provider interfaces behind one application-facing contract
-
-Included adapters:
-
-- `EmailAdapter`
-- `SmsAdapter`
-- `PushAdapter`
-
-### Composite Pattern
-
-Implemented in [`server/src/patterns/notification_composite.ts`](./server/src/patterns/notification_composite.ts).
-
-Purpose:
-
-- send one notification event through multiple channels as a single grouped action
-
-Included class:
-
-- `NotificationGroup`
+| Pattern | Files | Purpose | Main Classes |
+| --- | --- | --- | --- |
+| Factory | [`server/src/patterns/appointment_factory.ts`](./server/src/patterns/appointment_factory.ts) | Create the correct appointment object based on appointment type without spreading conditional creation logic | `WalkInFactory`, `ScheduledFactory`, `EmergencyFactory`, `AppointmentFactoryProvider` |
+| Strategy | [`server/src/patterns/queue_strategy.ts`](./server/src/patterns/queue_strategy.ts) | Allow queue ordering rules to change without rewriting queue manager logic | `FIFOQueueStrategy`, `PriorityQueueStrategy`, `RoundRobinQueueStrategy` |
+| Observer | [`server/src/patterns/queue_manager.ts`](./server/src/patterns/queue_manager.ts), [`server/src/patterns/queue_observer.ts`](./server/src/patterns/queue_observer.ts) | Notify observers when queue state changes while keeping queue logic decoupled | `QueueManager`, `PatientQueueObserver`, `DoctorQueueObserver` |
+| Singleton | [`server/src/patterns/queue_registry.ts`](./server/src/patterns/queue_registry.ts) | Maintain one shared registry of doctor queues across the application | `QueueRegistry` |
+| Adapter | [`server/src/patterns/notification_adapter.ts`](./server/src/patterns/notification_adapter.ts) | Normalize different notification providers behind one application-facing contract | `EmailAdapter`, `SmsAdapter`, `PushAdapter` |
+| Composite | [`server/src/patterns/notification_composite.ts`](./server/src/patterns/notification_composite.ts) | Send one notification event through multiple channels as a grouped action | `NotificationGroup` |
 
 ## Data Models
 
 The MongoDB persistence layer lives in [`server/src/models`](./server/src/models).
 
-### User Model
+**User Model**  
+File: [`server/src/models/user_model.ts`](./server/src/models/user_model.ts)  
+Main responsibility: Store patient, doctor, and admin data in one role-based collection  
+Covers: user profiles, doctor availability, admin doctor management
 
-Defined in [`server/src/models/user_model.ts`](./server/src/models/user_model.ts).
+**Appointment Model**  
+File: [`server/src/models/appointment_model.ts`](./server/src/models/appointment_model.ts)  
+Main responsibility: Store appointment lifecycle and queue mapping  
+Covers: scheduled, walk-in, emergency, status, reschedule, cancellation, critical cases
 
-Supports:
+**Queue Model**  
+File: [`server/src/models/queue_model.ts`](./server/src/models/queue_model.ts)  
+Main responsibility: Store per-doctor queue state and queue entries  
+Covers: daily queue snapshots, token order, patient queue status
 
-- patient profile data
-- doctor profile data
-- admin profile data
-- role-based user storage in a single collection
-- doctor availability data
-- doctor management data for admins
+**Notification Model**  
+File: [`server/src/models/notification_model.ts`](./server/src/models/notification_model.ts)  
+Main responsibility: Store notification history for users  
+Covers: queue updates, reminders, follow-ups, read or unread state
 
-### Appointment Model
+**Medical Record Model**  
+File: [`server/src/models/medical_record_model.ts`](./server/src/models/medical_record_model.ts)  
+Main responsibility: Store consultation history and clinical follow-up data  
+Covers: diagnosis, notes, prescriptions, follow-ups, critical marking
 
-Defined in [`server/src/models/appointment_model.ts`](./server/src/models/appointment_model.ts).
-
-Supports:
-
-- scheduled, walk-in, and emergency appointments
-- appointment status tracking
-- queue token and queue position mapping
-- reschedule and cancellation metadata
-- admin override details
-- critical case flagging
-
-### Queue Model
-
-Defined in [`server/src/models/queue_model.ts`](./server/src/models/queue_model.ts).
-
-Supports:
-
-- per-doctor queue storage
-- daily queue snapshots for each doctor
-- live queue entries with token number, status, and priority
-- waiting, called, in-progress, done, and missed patient states
-
-### Notification Model
-
-Defined in [`server/src/models/notification_model.ts`](./server/src/models/notification_model.ts).
-
-Supports:
-
-- queue updates
-- appointment reminders
-- follow-up notifications
-- general system messages
-- read and unread tracking
-
-### Medical Record Model
-
-Defined in [`server/src/models/medical_record_model.ts`](./server/src/models/medical_record_model.ts).
-
-Supports:
-
-- consultation notes
-- diagnosis details
-- prescription storage
-- follow-up planning
-- critical case marking
-- patient treatment history
-
-### System Setting Model
-
-Defined in [`server/src/models/system_setting_model.ts`](./server/src/models/system_setting_model.ts).
-
-Supports:
-
-- consultation duration configuration
-- hospital working hours
-- working day configuration
-- walk-in and emergency appointment control
-- maximum appointments per slot
-- queue strategy defaults
+**System Setting Model**  
+File: [`server/src/models/system_setting_model.ts`](./server/src/models/system_setting_model.ts)  
+Main responsibility: Store system-wide operational rules  
+Covers: consultation duration, working hours, queue defaults, appointment rules
 
 ## Getting Started
 
