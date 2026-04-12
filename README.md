@@ -331,51 +331,16 @@ Possible next steps for the project include:
 - implement admin system overview analytics
 - integrate real notification providers
 - expand queue and scheduling conflict resolution logic
-
+  
 ## Team Contributions
 
-| Team Member | Primary Contribution Areas |
-| --- | --- |
-| Sathvik | System design, interfaces, entities, design patterns, architecture, backend and frontend flow support |
-| Jagruthi | Database configuration, model and schema identification, documentation, README, frontend and backend contribution, use case diagrams |
-| Lalith | Design patterns, ER diagrams, backend integration, implementation support |
-| Nachiketh | Database modeling, class diagrams, frontend development, backend support |
-| Rashmi | Sequence diagrams, entities, frontend and backend support |
-
-<details>
-<summary><strong>Sathvik</strong></summary>
-
-Led the overall system design, defined interfaces and entities, applied design patterns, set up the development code structure and project architecture, worked on use case diagram version 2, and supported backend and frontend implementation flow and connections.
-
-</details>
-
-<details>
-<summary><strong>Jagruthi</strong></summary>
-
-Managed database configuration, identified models and schemas, prepared project documentation including the README, contributed to frontend and backend development, and worked on use case diagrams.
-
-</details>
-
-<details>
-<summary><strong>Lalith</strong></summary>
-
-Worked on design patterns, ER diagrams, backend integration, and implementation support.
-
-</details>
-
-<details>
-<summary><strong>Nachiketh</strong></summary>
-
-Responsible for database modeling, class diagrams, frontend development, and backend support.
-
-</details>
-
-<details>
-<summary><strong>Rashmi</strong></summary>
-
-Created sequence diagrams, worked on entities, and supported both frontend and backend development.
-
-</details>
+| Team Member | Contribution |
+|-------------|-------------|
+| Sathvik (Lead) | Led system design and architecture, worked on interfaces, entities, design patterns, use case diagrams, and contributed to frontend and backend development |
+| Jagruthi | Worked on database configuration, schema and model design, contributed to use case and class diagrams, managed README and documentation, and supported frontend and backend development |
+| Rashmi   | Focused on sequence, ER, and class diagrams, designed system workflows, contributed to entity structuring, assisted in documentation, and contributed to implementation across modules |
+| Lalith    | Contributed to design patterns, ER diagrams, backend integration, and played a key role in implementation, system-level development, and ensuring smooth module integration |
+| Nachiketh | Handled database modeling, class diagrams, and frontend development, while actively supporting backend integration, feature implementation, and overall system functionality |
 
 ## Conclusion
 
