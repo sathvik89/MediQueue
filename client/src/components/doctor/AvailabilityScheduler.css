@@ -1,0 +1,70 @@
+.scheduler-container {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.scheduler-header {
+  margin-bottom: 1.5rem;
+}
+
+.scheduler-header h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-dark);
+}
+
+.scheduler-header p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.time-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--border);
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.time-toggle:hover {
+  background-color: var(--bg-color);
+}
+
+.time-toggle.active {
+  border-color: var(--primary);
+  background-color: var(--primary-light);
+}
+
+.time-toggle input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.time-toggle label {
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.scheduler-actions {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}

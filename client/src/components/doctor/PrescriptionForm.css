@@ -1,0 +1,38 @@
+.prescription-form-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.prescription-form-card h3 {
+  margin: 0 0 1rem 0;
+  color: var(--text-dark);
+  font-size: 1.25rem;
+}
+
+.textarea-field {
+  width: 100%;
+  min-height: 120px;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.875rem;
+  resize: vertical;
+  margin-bottom: 1rem;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  transition: border-color 0.2s ease;
+}
+
+.textarea-field:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
