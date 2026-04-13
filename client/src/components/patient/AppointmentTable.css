@@ -1,0 +1,105 @@
+.table-container {
+  overflow-x: auto;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.appointment-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.appointment-table th,
+.appointment-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.appointment-table th {
+  background-color: var(--bg-color);
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+.appointment-table tr:last-child td {
+  border-bottom: none;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-scheduled {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+}
+
+.status-cancelled {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.status-completed {
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
+
+.doctor-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.doctor-name {
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.doctor-spec {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.date-time-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.appt-date {
+  font-weight: 500;
+}
+
+.appt-time {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  color: var(--danger);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

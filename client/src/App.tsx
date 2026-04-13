@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
+import { PatientDashboard } from './pages/PatientDashboard';
 
 // Temporary placeholder for protected routes
 const DashboardPlaceholder = ({ role }: { role: string }) => (
@@ -22,6 +23,26 @@ const DashboardPlaceholder = ({ role }: { role: string }) => (
   </div>
 );
 
+// Protected Route Wrapper
+const ProtectedRoute = ({ children, allowedRole }: { children: JSX.Element, allowedRole?: string }) => {
+  const { authState } = useAuth();
+  
+  if (authState.isLoading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (!authState.isAuthenticated || !authState.user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRole && authState.user.role !== allowedRole) {
+    // If they go to wrong dashboard, send them to login or their actual dashboard
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
+
 function App() {
   return (
     <AuthProvider>
@@ -31,10 +52,32 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           
-          {/* Placeholders for future modules */}
-          <Route path="/dashboard" element={<DashboardPlaceholder role="Patient" />} />
-          <Route path="/doctor" element={<DashboardPlaceholder role="Doctor" />} />
-          <Route path="/admin" element={<DashboardPlaceholder role="Admin" />} />
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute allowedRole="patient">
+                <PatientDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/doctor" 
+            element={
+              <ProtectedRoute allowedRole="doctor">
+                <DashboardPlaceholder role="Doctor" />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <DashboardPlaceholder role="Admin" />
+              </ProtectedRoute>
+            } 
+          />
           
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
