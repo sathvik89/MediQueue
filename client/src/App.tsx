@@ -5,6 +5,8 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { PatientDashboard } from './pages/PatientDashboard';
 
+import { DoctorDashboard } from './pages/DoctorDashboard';
+
 // Temporary placeholder for protected routes
 const DashboardPlaceholder = ({ role }: { role: string }) => (
   <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -65,7 +67,7 @@ function App() {
             path="/doctor" 
             element={
               <ProtectedRoute allowedRole="doctor">
-                <DashboardPlaceholder role="Doctor" />
+                <DoctorDashboard />
               </ProtectedRoute>
             } 
           />

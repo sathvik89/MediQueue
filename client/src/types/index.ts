@@ -46,3 +46,12 @@ export interface QueueStatus {
   estimatedWaitTime: number; // in minutes
   currentServing: number;
 }
+
+// Module 3 additions
+export interface PatientConsultation {
+  id: string;
+  patientName: string;
+  timeSlot: string;
+  status: 'waiting' | 'in-progress' | 'completed';
+  issues?: string;
+}
