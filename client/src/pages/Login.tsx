@@ -6,6 +6,8 @@ import { Button } from '../components/Button';
 import { mockLogin } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
 import type { Role } from '../types';
+import { User, Stethoscope, ShieldCheck, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -23,7 +25,6 @@ export const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Mock validation
       if (!email || !password) {
         throw new Error('Please fill all fields');
       }
@@ -51,38 +52,57 @@ export const Login: React.FC = () => {
     }
   };
 
+  const roles: { value: Role; label: string; icon: React.ElementType }[] = [
+    { value: 'patient', label: 'Patient', icon: User },
+    { value: 'doctor', label: 'Doctor', icon: Stethoscope },
+    { value: 'admin', label: 'Admin', icon: ShieldCheck },
+  ];
+
   return (
     <AuthLayout
       title="Welcome Back"
-      subtitle="Login to your MediQueue account"
+      subtitle="Log in to your MediQueue account"
       footerText="Don't have an account?"
       footerLinkText="Register here"
       footerLinkTo="/register"
     >
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {error && (
-          <div style={{ backgroundColor: 'var(--danger)', color: '#fff', padding: '0.75rem', borderRadius: 'var(--radius-md)', fontSize: '0.875rem' }}>
-            {error}
-          </div>
-        )}
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
+        <AnimatePresence>
+          {error && (
+            <motion.div 
+              className="auth-error"
+              initial={{ opacity: 0, height: 0, y: -10 }}
+              animate={{ opacity: 1, height: 'auto', y: 0 }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <AlertCircle size={20} />
+              <span>{error}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
         
-        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '0.5rem' }}>
-          <label style={{ fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--text-dark)' }}>
-            I am a
-          </label>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            {(['patient', 'doctor', 'admin'] as Role[]).map((r) => (
-              <label key={r} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', cursor: 'pointer', fontSize: '0.875rem', textTransform: 'capitalize' }}>
-                <input 
-                  type="radio" 
-                  name="role" 
-                  value={r} 
-                  checked={role === r} 
-                  onChange={(e) => setRole(e.target.value as Role)}
-                />
-                {r}
-              </label>
-            ))}
+        <div style={{ marginBottom: '0.5rem' }}>
+          <span className="role-label">I am logging in as a:</span>
+          <div className="role-group">
+            {roles.map((r) => {
+              const Icon = r.icon;
+              return (
+                <label key={r.value} className={`role-card ${role === r.value ? 'active' : ''}`}>
+                  <input 
+                    type="radio" 
+                    name="role" 
+                    value={r.value} 
+                    checked={role === r.value} 
+                    onChange={(e) => setRole(e.target.value as Role)}
+                  />
+                  <div className="role-card-icon">
+                    <Icon size={24} strokeWidth={role === r.value ? 2.5 : 2} />
+                  </div>
+                  <span className="role-card-text">{r.label}</span>
+                </label>
+              );
+            })}
           </div>
         </div>
 
@@ -103,7 +123,13 @@ export const Login: React.FC = () => {
           required 
         />
 
-        <Button type="submit" fullWidth isLoading={isLoading} style={{ marginTop: '0.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem', marginTop: '-0.5rem' }}>
+          <a href="#" style={{ fontSize: '0.875rem', color: 'var(--primary)', fontWeight: 500, textDecoration: 'none' }}>
+            Forgot password?
+          </a>
+        </div>
+
+        <Button type="submit" fullWidth isLoading={isLoading} style={{ padding: '0.875rem' }}>
           Sign In
         </Button>
       </form>
