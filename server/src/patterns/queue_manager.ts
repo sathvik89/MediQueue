@@ -12,7 +12,7 @@ import {
   QueueEntryStatus,
   QueueSnapshot,
 } from "../types/system.types";
-import { FIFOQueueStrategy } from "./queue_strategy";
+import { FIFOQueueStrategy } from "./queue_strategy"; //default
 
 export class QueueManager implements IQueueSubject {
   private observers: IQueueObserver[] = [];

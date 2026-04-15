@@ -8,6 +8,7 @@
 import { IQueueStrategy } from "../interfaces/queue_strategy_interface";
 import { QueueEntry } from "../types/system.types";
 
+// /Processes patients in the order they checked in.
 export class FIFOQueueStrategy implements IQueueStrategy {
   sort(entries: QueueEntry[]): QueueEntry[] {
     return [...entries].sort(
@@ -16,7 +17,7 @@ export class FIFOQueueStrategy implements IQueueStrategy {
     );
   }
 }
-
+//Gives higher priority patients precedence, then follows check-in order.
 export class PriorityQueueStrategy implements IQueueStrategy {
   sort(entries: QueueEntry[]): QueueEntry[] {
     return [...entries].sort((firstEntry, secondEntry) => {
@@ -28,7 +29,7 @@ export class PriorityQueueStrategy implements IQueueStrategy {
     });
   }
 }
-
+//Cycles through patients in a rotating order to ensure fair distribution.
 export class RoundRobinQueueStrategy implements IQueueStrategy {
   private lastToken = 0;
 

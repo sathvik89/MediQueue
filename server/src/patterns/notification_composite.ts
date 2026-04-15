@@ -8,6 +8,7 @@ import { NotificationMessage } from "../types/system.types";
 
 export class NotificationGroup implements INotificationChannel {
   private channels: INotificationChannel[] = [];
+  //channel = email/sms/push
 
   add(channel: INotificationChannel): void {
     this.channels.push(channel);
@@ -17,7 +18,14 @@ export class NotificationGroup implements INotificationChannel {
     this.channels = this.channels.filter((item) => item !== channel);
   }
 
-  send(message: NotificationMessage): void {
+  send(message: NotificationMessage): void {//recursive way
+    //type NotificationMessage = {
+    //   userId: string;
+    //   title: string;
+    //   body: string;
+    //   type: NotificationType;
+    //   createdAt: Date;
+    // // };
     this.channels.forEach((channel) => channel.send(message));
   }
 }
