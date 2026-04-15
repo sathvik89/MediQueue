@@ -16,9 +16,9 @@ export interface SchedulingConflict {
 
 // Initial Mock Data
 let mockAdminDoctors: Doctor[] = [
-  { id: 'd1', name: 'Dr. Sarah Jenkins', specialty: 'Cardiology', availability: ['09:00 AM', '10:00 AM', '02:00 PM'] },
-  { id: 'd2', name: 'Dr. Michael Chen', specialty: 'Neurology', availability: ['11:00 AM', '01:00 PM', '04:00 PM'] },
-  { id: 'd3', name: 'Dr. Emily Carter', specialty: 'General Practice', availability: ['08:00 AM', '09:30 AM', '03:00 PM'] },
+  { id: 'd1', name: 'Dr. Sarah Jenkins', specialty: 'Cardiology', availability: ['09:00 AM', '10:00 AM', '02:00 PM'], availabilityStatus: 'AVAILABLE' },
+  { id: 'd2', name: 'Dr. Michael Chen', specialty: 'Neurology', availability: ['11:00 AM', '01:00 PM', '04:00 PM'], availabilityStatus: 'AVAILABLE' },
+  { id: 'd3', name: 'Dr. Emily Carter', specialty: 'General Practice', availability: ['08:00 AM', '09:30 AM', '03:00 PM'], availabilityStatus: 'AVAILABLE' },
 ];
 
 let mockConflicts: SchedulingConflict[] = [
@@ -51,7 +51,8 @@ export const addDoctor = async (name: string, specialty: string): Promise<Doctor
         id: 'd' + Math.random().toString(36).substr(2, 5),
         name: name.startsWith('Dr.') ? name : `Dr. ${name}`,
         specialty,
-        availability: ['09:00 AM', '10:00 AM', '11:00 AM'] // default slots
+        availability: ['09:00 AM', '10:00 AM', '11:00 AM'], // default slots
+        availabilityStatus: 'AVAILABLE'
       };
       mockAdminDoctors.push(newDoctor);
       resolve(newDoctor);
