@@ -37,7 +37,12 @@ export const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <DashboardLayout>
+    <DashboardLayout
+      navItems={[{ id: 'admin', label: 'Admin Panel', icon: Activity }]}
+      activeNav="admin"
+      onNavChange={() => {}}
+      pageTitle="Admin Dashboard"
+    >
       <div className="admin-dashboard-container">
         
         {/* Statistics Row */}
