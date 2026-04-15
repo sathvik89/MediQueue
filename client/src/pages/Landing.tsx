@@ -31,7 +31,7 @@ const Typewriter = () => {
           initial={{ y: '100%', opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: '-100%', opacity: 0 }}
-          transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+          transition={{ duration: 0.5, ease: EASE_OUT_EXPO as any }}
           className="block"
         >
           {WORDS[i]}
@@ -87,14 +87,14 @@ export const Landing = () => {
           <div className="grid-2">
             {/* Left Content */}
             <motion.div variants={containerVariants} initial="hidden" animate="show">
-              <motion.div variants={itemVariants}>
+              <motion.div variants={itemVariants as any}>
                 <div className="status-badge" style={{ marginBottom: '2rem' }}>
                   <span className="status-dot animate-pulse" />
                   <span>Live Queue Tracking Available</span>
                 </div>
               </motion.div>
 
-              <motion.div variants={itemVariants}>
+              <motion.div variants={itemVariants as any}>
                 <h1 className="heading-1" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 800, lineHeight: 1.1, color: 'var(--text-dark)', marginBottom: '0.5rem' }}>
                   Hospital Queues.
                 </h1>
@@ -103,11 +103,11 @@ export const Landing = () => {
                 </div>
               </motion.div>
 
-              <motion.p variants={itemVariants} className="leading-relaxed text-muted" style={{ fontSize: '1.125rem', maxWidth: '500px', marginBottom: '2.5rem' }}>
+              <motion.p variants={itemVariants as any} className="leading-relaxed text-muted" style={{ fontSize: '1.125rem', maxWidth: '500px', marginBottom: '2.5rem' }}>
                 Book appointments, track your live queue position, and eliminate waiting room chaos. A smart solution for modern healthcare facilities.
               </motion.p>
 
-              <motion.div variants={itemVariants} className="nav-actions" style={{ flexWrap: 'wrap' }}>
+              <motion.div variants={itemVariants as any} className="nav-actions" style={{ flexWrap: 'wrap' }}>
                 <Link to="/register">
                   <button className="landing-btn landing-btn-primary group">
                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -124,7 +124,7 @@ export const Landing = () => {
               </motion.div>
 
               {/* Stats or trust signals */}
-              <motion.div variants={itemVariants} style={{ display: 'flex', gap: '2rem', marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--border)' }}>
+              <motion.div variants={itemVariants as any} style={{ display: 'flex', gap: '2rem', marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--border)' }}>
                 <div>
                   <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-dark)' }}>2.5k+</div>
                   <div className="text-muted" style={{ fontSize: '0.875rem' }}>Active Patients</div>
@@ -144,7 +144,7 @@ export const Landing = () => {
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: EASE_OUT_EXPO }}
+              transition={{ duration: 0.8, delay: 0.4, ease: EASE_OUT_EXPO as any }}
             >
               <div className="hero-image-wrapper">
                 {/* Fallback pattern if image is missing, but it should load our generated dashboard */}

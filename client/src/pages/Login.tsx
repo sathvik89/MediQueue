@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { AuthLayout } from '../layouts/AuthLayout';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
-import { mockLogin } from '../services/authService';
+import { login } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
 import type { Role } from '../types';
 import { User, Stethoscope, ShieldCheck, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ export const Login: React.FC = () => {
   const [error, setError] = useState('');
   
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login: login_ctx } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,8 +30,8 @@ export const Login: React.FC = () => {
         throw new Error('Please fill all fields');
       }
       
-      const user = await mockLogin(email, role);
-      login(user);
+      const { user } = await login({ email, password, role });
+      login_ctx(user);
       
       // Redirect based on role
       switch (user.role) {
@@ -46,11 +47,14 @@ export const Login: React.FC = () => {
           break;
       }
     } catch (err: any) {
-      setError(err.message || 'Login failed');
+      // Surface the server error message if available
+      const serverMessage = err?.response?.data?.message;
+      setError(serverMessage || err.message || 'Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
+
 
   const roles: { value: Role; label: string; icon: React.ElementType }[] = [
     { value: 'patient', label: 'Patient', icon: User },
