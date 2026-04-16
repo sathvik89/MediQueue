@@ -6,7 +6,7 @@ import { tokenUtils } from "../utils/token";
  * Base URL is proxied through Vite dev server: /api → http://localhost:5000/api
  */
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: import.meta.env.VITE_API_URL || "/api",
   headers: {
     "Content-Type": "application/json",
   },
