@@ -16,7 +16,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const requestedRole = (role as UserRole) || UserRole.PATIENT;
+    const requestedRole = (role ? role.toUpperCase() : UserRole.PATIENT) as UserRole;
 
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
@@ -88,7 +88,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Enforce role check from login UI 
-    if (role && user.role !== role) {
+    if (role && user.role !== role.toUpperCase()) {
       res.status(401).json({ message: `No ${role} account found with that email.` });
       return;
     }

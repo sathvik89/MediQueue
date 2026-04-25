@@ -56,6 +56,11 @@ const userSchema = new Schema(
       ref: "User",
       default: [],
     },
+    preferredStrategy: {
+      type: String,
+      enum: ["FIFO", "PRIORITY", "ROUND_ROBIN"],
+      default: "FIFO",
+    },
     deactivatedAt: { type: Date },
     deactivatedBy: { type: Schema.Types.ObjectId, ref: "User" },
   },
