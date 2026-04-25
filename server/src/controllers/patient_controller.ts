@@ -23,8 +23,8 @@ export const getDoctors = async (req: any, res: Response): Promise<void> => {
       name: doc.name,
       specialty: doc.specialization || "General Medicine",
       availability: ["09:00", "10:00", "11:00", "14:00", "15:00"], // Mock for now or fetch from schedule
-      availabilityStatus: doc.availabilityStatus || "AVAILABLE",
-      imageUrl: doc.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.name)}&background=random`,
+      availabilityStatus: (doc as any).availabilityStatus || "AVAILABLE",
+      imageUrl: (doc as any).imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.name)}&background=random`,
     }));
 
     res.status(200).json(formattedDoctors);
@@ -192,7 +192,7 @@ export const cancelAppointment = async (req: any, res: Response): Promise<void> 
     });
 
     if (queue) {
-      queue.entries = queue.entries.filter(e => e.appointmentId.toString() !== id);
+      queue.entries = queue.entries.filter(e => e.appointmentId.toString() !== id) as any;
       await queue.save();
     }
 
