@@ -2,7 +2,7 @@ import React from 'react';
 import './Button.css';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'outline';
+  variant?: 'primary' | 'outline' | 'danger';
   fullWidth?: boolean;
   isLoading?: boolean;
 }
@@ -17,7 +17,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   const classes = [
     'btn',
-    variant === 'primary' ? 'btn-primary' : 'btn-outline',
+    variant === 'primary' ? 'btn-primary' : variant === 'danger' ? 'btn-danger' : 'btn-outline',
     fullWidth ? 'btn-full' : '',
     className || ''
   ].filter(Boolean).join(' ');

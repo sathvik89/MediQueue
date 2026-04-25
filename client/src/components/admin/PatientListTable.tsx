@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Search, ChevronDown, UserSquare2, Mail, Phone, Calendar } from 'lucide-react';
+import React from 'react';
+import { Search, UserSquare2, Mail, Phone, Calendar } from 'lucide-react';
 import type { PatientAdminView } from '../../types';
 
 interface PatientListTableProps {

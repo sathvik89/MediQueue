@@ -10,7 +10,7 @@ import { DoctorCard } from '../../components/patient/DoctorCard';
 import { BookingModal } from '../../components/patient/BookingModal';
 import { NotificationList } from '../../components/patient/NotificationList';
 import { HistoryTable } from '../../components/patient/HistoryTable';
-import { PageHeader, StatCard } from '../../components/ui/index';
+import { PageHeader, StatCard, EmptyState } from '../../components/ui/index';
 import {
   getDoctors, getAppointments, getNotifications, getMedicalHistory,
   bookAppointment, cancelAppointment, markNotificationRead
