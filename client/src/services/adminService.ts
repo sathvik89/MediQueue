@@ -48,6 +48,6 @@ export const getConflicts = async (): Promise<SchedulingConflict[]> => {
   return [];
 };
 
-export const resolveConflict = async (conflictId: string): Promise<void> => {
+export const resolveConflict = async (_conflictId: string): Promise<void> => {
   // Logic if implemented
 };

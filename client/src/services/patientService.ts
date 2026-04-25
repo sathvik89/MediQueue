@@ -46,6 +46,6 @@ export const cancelAppointment = async (appointmentId: string): Promise<void> =>
   await api.delete(`/patient/appointments/${appointmentId}`);
 };
 
-export const markNotificationRead = async (notificationId: string): Promise<void> => {
+export const markNotificationRead = async (_notificationId: string): Promise<void> => {
   // Logic if needed
 };

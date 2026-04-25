@@ -39,3 +39,12 @@
 .btn-full {
   width: 100%;
 }
+
+.btn-danger {
+  background-color: var(--danger);
+  color: #fff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #dc2626; /* Darker red */
+}
