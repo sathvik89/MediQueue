@@ -53,7 +53,7 @@ export const DoctorDashboard: React.FC = () => {
       setStrategy(strat);
       setDoctorStatusState(status);
       setWorkload(wl);
-      const current = q.find(p => p.status === 'in-progress');
+      const current = q.find(p => p.status.toLowerCase() === 'in-progress');
       if (current) setActivePatient(current);
     } catch {
       toast.error('Failed to load dashboard data');
@@ -86,7 +86,7 @@ export const DoctorDashboard: React.FC = () => {
     if (!activePatient) return;
     const toastId = toast.loading('Saving consultation...');
     try {
-      await completeConsultation(activePatient.id);
+      await completeConsultation(activePatient.id, _data);
       setActivePatient(null);
       await fetchAll();
       toast.success(`Consultation saved for ${activePatient.patientName}`, { id: toastId });
@@ -141,8 +141,8 @@ export const DoctorDashboard: React.FC = () => {
     }
   };
 
-  const waiting = queue.filter(q => q.status === 'waiting').length;
-  const completed = queue.filter(q => q.status === 'completed').length;
+  const waiting = queue.filter(q => q.status.toLowerCase() === 'waiting').length;
+  const completed = queue.filter(q => q.status.toLowerCase() === 'completed').length;
 
   if (loadingQueue) {
     return (

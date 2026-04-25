@@ -231,11 +231,19 @@ export const PatientDashboard: React.FC = () => {
           </div>
 
           {/* Doctor Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
-            {filteredDoctors.map(doc => (
-              <DoctorCard key={doc.id} doctor={doc} onBook={handleBookClick} />
-            ))}
-          </div>
+          {filteredDoctors.length === 0 ? (
+            <EmptyState 
+              icon={Search} 
+              title="No doctors found" 
+              description={specialtyFilter ? `We couldn't find any ${specialtyFilter} specialists at the moment.` : "No medical specialists are available right now. Please check back later."} 
+            />
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
+              {filteredDoctors.map(doc => (
+                <DoctorCard key={doc.id} doctor={doc} onBook={handleBookClick} />
+              ))}
+            </div>
+          )}
         </div>
       )}
 
