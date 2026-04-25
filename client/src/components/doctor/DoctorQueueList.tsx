@@ -26,8 +26,8 @@ const priorityColor: Record<number, string> = { 1: '#6b7280', 2: '#1e40af', 3: '
 export const DoctorQueueList: React.FC<DoctorQueueListProps> = ({
   queue, onCallNext, onSkip, onFlagCritical, isLoading, strategy, onStrategyChange
 }) => {
-  const waiting = queue.filter(q => q.status === 'waiting');
-  const inProgress = queue.find(q => q.status === 'in-progress');
+  const waiting = queue.filter(q => q.status.toLowerCase() === 'waiting');
+  const inProgress = queue.find(q => q.status.toLowerCase() === 'in-progress');
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', height: '100%' }}>

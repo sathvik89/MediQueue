@@ -1,3 +1,6 @@
+# Build Command: npm install && npm run build
+# Start Command: npm start
+# Root Directory: server
 services:
   - type: web
     name: mediqueue-backend
@@ -12,7 +15,6 @@ services:
         value: production
       - key: PORT
         value: 5000
-      # The following must be filled securely in the Render Dashboard
       - key: MONGODB_URI
         sync: false
       - key: JWT_SECRET

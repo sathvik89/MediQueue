@@ -50,6 +50,15 @@ export interface Doctor {
   imageUrl?: string;
 }
 
+export interface PatientAdminView {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  joinDate: string;
+  totalAppointments: number;
+}
+
 export interface TimeSlot {
   startTime: string;
   endTime: string;
