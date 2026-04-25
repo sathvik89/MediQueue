@@ -1,10 +1,4 @@
 {
-  "_deployment_info": {
-    "Build Command": "npm run build",
-    "Install Command": "npm install",
-    "Output Directory": "dist",
-    "Framework Preset": "Vite"
-  },
   "rewrites": [
     {
       "source": "/(.*)",
