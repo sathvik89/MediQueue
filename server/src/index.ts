@@ -13,28 +13,16 @@ connectDB();
 const app = express();
 
 // ── Security & CORS ──────────────────────────────────────────────
-const allowedOrigins = [
-  process.env.CLIENT_ORIGIN,
-  "https://medi-queue-indol.vercel.app",
-  "http://localhost:5173"
-].filter(Boolean) as string[];
+// This is the most permissive setting to ensure connectivity
+app.use(cors({
+  origin: true, // This reflects the request origin, allowing anything
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+}));
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+// Handle preflight requests manually just in case
+app.options('*', cors());
 
 // ── Body Parsing ─────────────────────────────────────────────────
 app.use(express.json({ limit: "10mb" }));
