@@ -1,4 +1,5 @@
-import type { Doctor } from '../types';
+import { api } from './api';
+import type { Doctor, PatientAdminView } from '../types';
 
 export interface SystemStats {
   totalPatientsToday: number;
@@ -14,72 +15,39 @@ export interface SchedulingConflict {
   issue: string; // e.g., "Double booked"
 }
 
-// Initial Mock Data
-let mockAdminDoctors: Doctor[] = [
-  { id: 'd1', name: 'Dr. Sarah Jenkins', specialty: 'Cardiology', availability: ['09:00 AM', '10:00 AM', '02:00 PM'], availabilityStatus: 'AVAILABLE' },
-  { id: 'd2', name: 'Dr. Michael Chen', specialty: 'Neurology', availability: ['11:00 AM', '01:00 PM', '04:00 PM'], availabilityStatus: 'AVAILABLE' },
-  { id: 'd3', name: 'Dr. Emily Carter', specialty: 'General Practice', availability: ['08:00 AM', '09:30 AM', '03:00 PM'], availabilityStatus: 'AVAILABLE' },
-];
-
-let mockConflicts: SchedulingConflict[] = [
-  { id: 'conf1', doctorName: 'Dr. Emily Carter', timeSlot: '09:30 AM', issue: 'Double Booked (2 Patients)' }
-];
-
 export const getSystemStats = async (): Promise<SystemStats> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        totalPatientsToday: 142,
-        activeDoctors: mockAdminDoctors.length,
-        averageWaitTime: 18,
-        totalAppointments: 210
-      });
-    }, 600);
-  });
+  const response = await api.get<SystemStats>('/admin/stats');
+  return response.data;
 };
 
 export const getAllDoctors = async (): Promise<Doctor[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve([...mockAdminDoctors]), 500);
-  });
+  const response = await api.get<Doctor[]>('/patient/doctors'); // Reuse patient doctor list or create admin one
+  return response.data;
 };
 
 export const addDoctor = async (name: string, specialty: string): Promise<Doctor> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const newDoctor: Doctor = {
-        id: 'd' + Math.random().toString(36).substr(2, 5),
-        name: name.startsWith('Dr.') ? name : `Dr. ${name}`,
-        specialty,
-        availability: ['09:00 AM', '10:00 AM', '11:00 AM'], // default slots
-        availabilityStatus: 'AVAILABLE'
-      };
-      mockAdminDoctors.push(newDoctor);
-      resolve(newDoctor);
-    }, 800);
-  });
+  const response = await api.post<Doctor>('/admin/doctors', { name, specialty });
+  return response.data;
 };
 
 export const removeDoctor = async (doctorId: string): Promise<void> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      mockAdminDoctors = mockAdminDoctors.filter(d => d.id !== doctorId);
-      resolve();
-    }, 800);
-  });
+  await api.delete(`/admin/doctors/${doctorId}`);
+};
+
+export const toggleDoctorStatus = async (doctorId: string): Promise<void> => {
+  await api.patch(`/admin/doctors/${doctorId}/toggle-status`);
+};
+
+export const getAllPatients = async (query: string = '', sortBy: string = 'newest'): Promise<PatientAdminView[]> => {
+  const response = await api.get<PatientAdminView[]>('/admin/patients', { params: { query, sortBy } });
+  return response.data;
 };
 
 export const getConflicts = async (): Promise<SchedulingConflict[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve([...mockConflicts]), 400);
-  });
+  // Logic if implemented
+  return [];
 };
 
 export const resolveConflict = async (conflictId: string): Promise<void> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      mockConflicts = mockConflicts.filter(c => c.id !== conflictId);
-      resolve();
-    }, 600);
-  });
+  // Logic if implemented
 };
