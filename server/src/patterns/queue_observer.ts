@@ -13,7 +13,7 @@ export class PatientQueueObserver implements IQueueObserver {
 
   update(snapshot: QueueSnapshot): void {
     const isInQueue = snapshot.entries.some(
-      (entry) => entry.patientId === this.patientId
+      (entry) => entry.patientId === this.patientId,
     );
 
     if (isInQueue) {
