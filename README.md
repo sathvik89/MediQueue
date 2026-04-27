@@ -13,8 +13,10 @@ The project is built around three main roles: patients, doctors, and admins. Pat
 
 - [Project Overview](#project-overview)
 - [Tech Stack](#tech-stack)
+- [Live Deployment](#live-deployment)
 - [Setup and Installation](#setup-and-installation)
 - [How to Run the Project](#how-to-run-the-project)
+- [Testing](#testing)
 - [Architecture](#architecture)
 - [Backend Modules](#backend-modules)
 - [Frontend Modules](#frontend-modules)
@@ -29,25 +31,32 @@ The project is built around three main roles: patients, doctors, and admins. Pat
 
 MediQueue replaces manual hospital queue handling with a structured digital workflow:
 
-| Role | Main Functionalities |
-| --- | --- |
-| Patient | Register/login, browse doctors, book appointments, cancel appointments, view appointment history, track queue position |
-| Doctor | View today's queue, update queue strategy, change availability status, call next patient, complete consultation, create prescription/follow-up records |
-| Admin | View system dashboard, manage doctors, inspect patients, monitor stats, review scheduling conflicts |
+| Role    | Main Functionalities                                                                                                                                   |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Patient | Register/login, browse doctors, book appointments, cancel appointments, view appointment history, track queue position                                 |
+| Doctor  | View today's queue, update queue strategy, change availability status, call next patient, complete consultation, create prescription/follow-up records |
+| Admin   | View system dashboard, manage doctors, inspect patients, monitor stats, review scheduling conflicts                                                    |
 
 The application separates the user interface, API layer, domain entities, database models, and reusable design-pattern logic so the hospital workflow remains easy to understand and extend.
 
 ## Tech Stack
 
-| Layer | Technologies |
-| --- | --- |
-| Frontend | React 19, TypeScript, Vite, React Router, Axios, Framer Motion, Lucide React, React Hot Toast |
-| Backend | Node.js, Express 5, TypeScript, tsx, nodemon |
-| Database | MongoDB, Mongoose |
-| Authentication | JWT, bcrypt |
-| API Tools | CORS, Morgan, dotenv |
-| Development Tools | npm, ESLint, TypeScript compiler |
-| Deployment Config | Vercel config for client, Render config for backend/project deployment |
+| Layer             | Technologies                                                                                  |
+| ----------------- | --------------------------------------------------------------------------------------------- |
+| Frontend          | React 19, TypeScript, Vite, React Router, Axios, Framer Motion, Lucide React, React Hot Toast |
+| Backend           | Node.js, Express 5, TypeScript, tsx, nodemon                                                  |
+| Database          | MongoDB, Mongoose                                                                             |
+| Authentication    | JWT, bcrypt                                                                                   |
+| API Tools         | CORS, Morgan, dotenv                                                                          |
+| Development Tools | npm, ESLint, TypeScript compiler                                                              |
+| Deployment Config | Vercel config for client, Render config for backend/project deployment                        |
+
+## Live Deployment
+
+| Service     | URL                                                                          |
+| ----------- | ---------------------------------------------------------------------------- |
+| Frontend    | [https://medi-queue-indol.vercel.app/](https://medi-queue-indol.vercel.app/) |
+| Backend API | [https://mediqueue-8ofq.onrender.com](https://mediqueue-8ofq.onrender.com)   |
 
 ## Setup and Installation
 
@@ -129,16 +138,16 @@ http://localhost:5173
 
 ### Useful Commands
 
-| Folder | Command | Description |
-| --- | --- | --- |
-| `server` | `npm run dev` | Start the backend in development mode |
-| `server` | `npm run build` | Compile TypeScript into `dist` |
+| Folder   | Command             | Description                                     |
+| -------- | ------------------- | ----------------------------------------------- |
+| `server` | `npm run dev`       | Start the backend in development mode           |
+| `server` | `npm run build`     | Compile TypeScript into `dist`                  |
 | `server` | `npm run typecheck` | Check backend TypeScript without emitting files |
-| `server` | `npm run start` | Run the compiled backend from `dist/index.js` |
-| `client` | `npm run dev` | Start the Vite frontend |
-| `client` | `npm run build` | Build the production frontend |
-| `client` | `npm run lint` | Run frontend lint checks |
-| `client` | `npm run preview` | Preview the production build locally |
+| `server` | `npm run start`     | Run the compiled backend from `dist/index.js`   |
+| `client` | `npm run dev`       | Start the Vite frontend                         |
+| `client` | `npm run build`     | Build the production frontend                   |
+| `client` | `npm run lint`      | Run frontend lint checks                        |
+| `client` | `npm run preview`   | Preview the production build locally            |
 
 ### Seed Sample Doctors
 
@@ -148,6 +157,36 @@ The backend includes a seed script at `server/src/seed.ts` for adding sample doc
 cd server
 npx tsx src/seed.ts
 ```
+
+## Testing
+
+The first batch of automated backend tests is available in `server/tests`. These tests use Node's built-in test runner through `tsx`, so they can run TypeScript test files directly.
+
+Run the tests:
+
+```bash
+cd server
+npm test
+```
+
+Current verified result:
+
+```text
+tests 10
+pass 10
+fail 0
+```
+
+### Test Files
+
+| Test File                                  | What It Tests                                                                                                                                                                                                                                             |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `server/tests/appointment_factory.test.ts` | Verifies that `AppointmentFactoryProvider` returns the correct factory for walk-in, scheduled, and emergency appointments. It also checks that scheduled appointments default to normal priority and emergency appointments default to critical priority. |
+| `server/tests/auth_middleware.test.ts`     | Verifies authentication and role-authorization behavior. It checks that missing bearer tokens are rejected, valid JWTs attach the authenticated user to the request, and incorrect roles receive a forbidden response.                                    |
+| `server/tests/queue_strategy.test.ts`      | Verifies queue ordering rules. It checks FIFO ordering by check-in time, priority ordering by case severity, priority tie-breaking by check-in time, and round-robin rotation across repeated calls.                                                      |
+| `server/tests/README.md`                   | Documents the backend test cases, expected results, current pass/fail status                                                                                                                                                                              |
+
+The next planned test batch will cover patient appointment booking, appointment cancellation, patient queue status, doctor queue handling, and consultation completion.
 
 ## Architecture
 
@@ -182,11 +221,11 @@ server/src/
 
 Main backend route groups:
 
-| Route Group | Purpose |
-| --- | --- |
-| `/api/auth` | Register, login, and fetch the current authenticated user |
-| `/api/patient` | List doctors, book appointments, view appointments, cancel appointments, and check queue status |
-| `/api/doctor` | View queue, update strategy/status, call next patient, complete consultation, and view workload summary |
+| Route Group    | Purpose                                                                                                 |
+| -------------- | ------------------------------------------------------------------------------------------------------- |
+| `/api/auth`    | Register, login, and fetch the current authenticated user                                               |
+| `/api/patient` | List doctors, book appointments, view appointments, cancel appointments, and check queue status         |
+| `/api/doctor`  | View queue, update strategy/status, call next patient, complete consultation, and view workload summary |
 
 ## Frontend Modules
 
@@ -206,14 +245,14 @@ client/src/
 
 Frontend routes:
 
-| Route | Page |
-| --- | --- |
-| `/` | Landing page |
-| `/login` | Login page |
-| `/register` | Registration page |
+| Route        | Page              |
+| ------------ | ----------------- |
+| `/`          | Landing page      |
+| `/login`     | Login page        |
+| `/register`  | Registration page |
 | `/dashboard` | Patient dashboard |
-| `/doctor` | Doctor dashboard |
-| `/admin` | Admin dashboard |
+| `/doctor`    | Doctor dashboard  |
+| `/admin`     | Admin dashboard   |
 
 ## API Flow
 
@@ -229,25 +268,25 @@ Frontend routes:
 
 The backend includes design-pattern implementations that match the hospital queue domain:
 
-| Pattern | File | Purpose |
-| --- | --- | --- |
-| Factory | `server/src/patterns/appointment_factory.ts` | Creates walk-in, scheduled, or emergency appointments through a shared creation flow |
-| Strategy | `server/src/patterns/queue_strategy.ts` | Supports interchangeable queue ordering strategies such as FIFO, priority, and round robin |
-| Observer | `server/src/patterns/queue_manager.ts`, `server/src/patterns/queue_observer.ts` | Notifies patient and doctor observers when queue state changes |
-| Singleton | `server/src/patterns/queue_registry.ts` | Maintains a shared registry of doctor queue managers |
-| Adapter | `server/src/patterns/notification_adapter.ts` | Normalizes email, SMS, and push notification channels |
-| Composite | `server/src/patterns/notification_composite.ts` | Groups multiple notification channels into one send operation |
+| Pattern   | File                                                                            | Purpose                                                                                    |
+| --------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Factory   | `server/src/patterns/appointment_factory.ts`                                    | Creates walk-in, scheduled, or emergency appointments through a shared creation flow       |
+| Strategy  | `server/src/patterns/queue_strategy.ts`                                         | Supports interchangeable queue ordering strategies such as FIFO, priority, and round robin |
+| Observer  | `server/src/patterns/queue_manager.ts`, `server/src/patterns/queue_observer.ts` | Notifies patient and doctor observers when queue state changes                             |
+| Singleton | `server/src/patterns/queue_registry.ts`                                         | Maintains a shared registry of doctor queue managers                                       |
+| Adapter   | `server/src/patterns/notification_adapter.ts`                                   | Normalizes email, SMS, and push notification channels                                      |
+| Composite | `server/src/patterns/notification_composite.ts`                                 | Groups multiple notification channels into one send operation                              |
 
 ## Database Models
 
-| Model | Responsibility |
-| --- | --- |
-| `UserModel` | Stores patients, doctors, and admins with role-specific fields |
-| `AppointmentModel` | Stores appointment type, status, time slot, priority, cancellation, and completion data |
-| `QueueModel` | Stores daily doctor queues, queue entries, token numbers, and current token state |
-| `NotificationModel` | Stores user notification events and read/unread status |
-| `MedicalRecordModel` | Stores diagnosis, notes, prescriptions, follow-ups, and critical-case markers |
-| `SystemSettingModel` | Stores configurable hospital rules such as consultation duration and queue settings |
+| Model                | Responsibility                                                                          |
+| -------------------- | --------------------------------------------------------------------------------------- |
+| `UserModel`          | Stores patients, doctors, and admins with role-specific fields                          |
+| `AppointmentModel`   | Stores appointment type, status, time slot, priority, cancellation, and completion data |
+| `QueueModel`         | Stores daily doctor queues, queue entries, token numbers, and current token state       |
+| `NotificationModel`  | Stores user notification events and read/unread status                                  |
+| `MedicalRecordModel` | Stores diagnosis, notes, prescriptions, follow-ups, and critical-case markers           |
+| `SystemSettingModel` | Stores configurable hospital rules such as consultation duration and queue settings     |
 
 ## Project Structure
 
@@ -277,13 +316,13 @@ Supporting diagrams are available in the `diagrams` folder:
 
 ## Team Contributions
 
-| Team Member | Contribution |
-|-------------|-------------|
-| Sathvik (Lead) | Led system design and architecture, worked on interfaces, entities, design patterns, use case diagrams, and contributed to frontend and backend development |
-| Jagruthi | Worked on database configuration, schema and model design, contributed to use case and class diagrams, managed README and documentation, and supported frontend and backend development |
-| Rashmi   | Focused on sequence, ER, and class diagrams, designed system workflows, contributed to entity structuring, assisted in documentation, and contributed to implementation across modules |
-| Lalith    | Contributed to design patterns, ER diagrams, backend integration, and played a key role in implementation, system-level development, and ensuring smooth module integration |
-| Nachiket | Handled database modeling, class diagrams, and frontend development, while actively supporting backend integration, feature implementation, and overall system functionality |
+| Team Member    | Contribution                                                                                                                                                                            |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Sathvik (Lead) | Led system design and architecture, worked on interfaces, entities, design patterns, use case diagrams, and contributed to frontend and backend development                             |
+| Jagruthi       | Worked on database configuration, schema and model design, contributed to use case and class diagrams, managed README and documentation, and supported frontend and backend development |
+| Rashmi         | Focused on sequence, ER, and class diagrams, designed system workflows, contributed to entity structuring, assisted in documentation, and contributed to implementation across modules  |
+| Lalith         | Contributed to design patterns, ER diagrams, backend integration, and played a key role in implementation, system-level development, and ensuring smooth module integration             |
+| Nachiket       | Handled database modeling, class diagrams, and frontend development, while actively supporting backend integration, feature implementation, and overall system functionality            |
 
 ## Conclusion
 
