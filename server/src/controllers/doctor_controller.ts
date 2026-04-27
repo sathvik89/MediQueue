@@ -54,6 +54,16 @@ export const getQueueStrategy = async (req: any, res: Response): Promise<void> =
   }
 };
 
+export const getDoctorStatus = async (req: any, res: Response): Promise<void> => {
+  try {
+    const doctorId = req.user._id;
+    const user = await UserModel.findById(doctorId).select("availabilityStatus");
+    res.status(200).json({ status: user?.availabilityStatus || AvailabilityStatus.AVAILABLE });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching doctor status" });
+  }
+};
+
 export const updateQueueStrategy = async (req: any, res: Response): Promise<void> => {
   try {
     const doctorId = req.user._id;
@@ -127,6 +137,76 @@ export const callNextPatient = async (req: any, res: Response): Promise<void> =>
     });
   } catch (error) {
     res.status(500).json({ message: "Error calling next patient" });
+  }
+};
+
+export const skipPatient = async (req: any, res: Response): Promise<void> => {
+  try {
+    const doctorId = req.user._id;
+    const { id } = req.params;
+
+    const queue = await QueueModel.findOne({
+      doctorId,
+      "entries.appointmentId": id,
+    });
+
+    if (!queue) {
+      res.status(404).json({ message: "Queue entry not found" });
+      return;
+    }
+
+    const entry = queue.entries.find((item) => item.appointmentId.toString() === id);
+    if (!entry) {
+      res.status(404).json({ message: "Queue entry not found" });
+      return;
+    }
+
+    entry.status = QueueEntryStatus.WAITING;
+    entry.checkedInAt = new Date();
+    await AppointmentModel.findByIdAndUpdate(id, { status: AppointmentStatus.IN_QUEUE });
+    await queue.save();
+
+    res.status(200).json({ message: "Patient moved to the end of the queue" });
+  } catch (error) {
+    console.error("skipPatient error:", error);
+    res.status(500).json({ message: "Error skipping patient" });
+  }
+};
+
+export const flagCriticalCase = async (req: any, res: Response): Promise<void> => {
+  try {
+    const doctorId = req.user._id;
+    const { id } = req.params;
+
+    const appointment = await AppointmentModel.findOneAndUpdate(
+      { _id: id, doctorId },
+      { isCritical: true, priority: 4 },
+      { new: true }
+    );
+
+    if (!appointment) {
+      res.status(404).json({ message: "Appointment not found" });
+      return;
+    }
+
+    const queue = await QueueModel.findOne({
+      doctorId,
+      "entries.appointmentId": id,
+    });
+
+    if (queue) {
+      const entry = queue.entries.find((item) => item.appointmentId.toString() === id);
+      if (entry) {
+        entry.priority = 4;
+        entry.status = QueueEntryStatus.WAITING;
+      }
+      await queue.save();
+    }
+
+    res.status(200).json({ message: "Patient flagged as critical" });
+  } catch (error) {
+    console.error("flagCriticalCase error:", error);
+    res.status(500).json({ message: "Error flagging critical case" });
   }
 };
 

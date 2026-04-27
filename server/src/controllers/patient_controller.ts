@@ -83,10 +83,93 @@ export const bookAppointment = async (req: any, res: Response): Promise<void> =>
       await newAppointment.save();
     }
 
+    await NotificationModel.create({
+      userId: patientId,
+      appointmentId: newAppointment._id,
+      title: "Appointment booked",
+      body: newAppointment.tokenNumber
+        ? `Your appointment is booked and token #${newAppointment.tokenNumber} has been assigned.`
+        : "Your appointment has been booked successfully.",
+      type: "APPOINTMENT_REMINDER",
+    });
+
     res.status(201).json(newAppointment);
   } catch (error) {
     console.error("bookAppointment error:", error);
     res.status(500).json({ message: "Error booking appointment" });
+  }
+};
+
+export const getMyNotifications = async (req: any, res: Response): Promise<void> => {
+  try {
+    const patientId = req.user._id;
+    const notifications = await NotificationModel.find({ userId: patientId })
+      .sort({ createdAt: -1 })
+      .limit(50);
+
+    res.status(200).json(
+      notifications.map((notification: any) => ({
+        id: notification._id,
+        title: notification.title,
+        body: notification.body,
+        type: notification.type,
+        isRead: notification.isRead,
+        createdAt: notification.createdAt?.toISOString() || new Date().toISOString(),
+        appointmentId: notification.appointmentId,
+      }))
+    );
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching notifications" });
+  }
+};
+
+export const markNotificationRead = async (req: any, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const notification = await NotificationModel.findOneAndUpdate(
+      { _id: id, userId: req.user._id },
+      { isRead: true, readAt: new Date() },
+      { new: true }
+    );
+
+    if (!notification) {
+      res.status(404).json({ message: "Notification not found" });
+      return;
+    }
+
+    res.status(200).json({ message: "Notification marked as read" });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating notification" });
+  }
+};
+
+export const getMedicalHistory = async (req: any, res: Response): Promise<void> => {
+  try {
+    const patientId = req.user._id;
+    const records = await MedicalRecordModel.find({ patientId })
+      .populate("doctorId", "name")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(
+      records.map((record: any) => ({
+        id: record._id,
+        doctorName: record.doctorId?.name || "Doctor",
+        date: record.createdAt?.toISOString() || new Date().toISOString(),
+        diagnosis: record.diagnosis || "Consultation",
+        notes: record.notes || "",
+        prescription: record.prescription
+          ? {
+              medicines: record.prescription.medicines || [],
+              notes: record.prescription.notes || "",
+              issuedAt: record.prescription.issuedAt?.toISOString() || new Date().toISOString(),
+            }
+          : undefined,
+        followUpDate: record.followUp?.date?.toISOString(),
+        isCritical: Boolean(record.isCritical),
+      }))
+    );
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching medical history" });
   }
 };
 
@@ -182,6 +265,14 @@ export const cancelAppointment = async (req: any, res: Response): Promise<void> 
     appointment.status = AppointmentStatus.CANCELLED;
     appointment.cancelledAt = new Date();
     await appointment.save();
+
+    await NotificationModel.create({
+      userId: req.user._id,
+      appointmentId: appointment._id,
+      title: "Appointment cancelled",
+      body: "Your appointment has been cancelled successfully.",
+      type: "GENERAL",
+    });
 
     // Also remove from queue if it was in queue
     const today = new Date();

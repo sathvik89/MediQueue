@@ -6,6 +6,7 @@ import {
   getQueueStatus,
 } from "../src/controllers/patient_controller";
 import { AppointmentModel } from "../src/models/appointment_model";
+import { NotificationModel } from "../src/models/notification_model";
 import { QueueModel } from "../src/models/queue_model";
 import {
   AppointmentStatus,
@@ -18,6 +19,7 @@ import { createResponse } from "./helpers/mock_response";
 const originalAppointmentCreate = AppointmentModel.create;
 const originalAppointmentFindById = AppointmentModel.findById;
 const originalAppointmentFindOne = AppointmentModel.findOne;
+const originalNotificationCreate = NotificationModel.create;
 const originalQueueCreate = QueueModel.create;
 const originalQueueFindOne = QueueModel.findOne;
 
@@ -27,6 +29,7 @@ test.afterEach(() => {
   AppointmentModel.create = originalAppointmentCreate;
   AppointmentModel.findById = originalAppointmentFindById;
   AppointmentModel.findOne = originalAppointmentFindOne;
+  NotificationModel.create = originalNotificationCreate;
   QueueModel.create = originalQueueCreate;
   QueueModel.findOne = originalQueueFindOne;
 });
@@ -52,6 +55,7 @@ test("bookAppointment creates an appointment and adds today's appointment to the
     },
   };
   let appointmentPayload: any;
+  let notificationPayload: any;
 
   (AppointmentModel.create as any) = async (payload: any) => {
     appointmentPayload = payload;
@@ -59,6 +63,10 @@ test("bookAppointment creates an appointment and adds today's appointment to the
   };
   (QueueModel.findOne as any) = async () => null;
   (QueueModel.create as any) = async () => savedQueue;
+  (NotificationModel.create as any) = async (payload: any) => {
+    notificationPayload = payload;
+    return payload;
+  };
 
   const req = {
     user: { _id: "patient-1" },
@@ -86,12 +94,16 @@ test("bookAppointment creates an appointment and adds today's appointment to the
   assert.equal(savedAppointment.status, AppointmentStatus.IN_QUEUE);
   assert.equal(savedAppointment.saveCalled, true);
   assert.equal(savedQueue.saveCalled, true);
+  assert.equal(notificationPayload.userId, "patient-1");
+  assert.equal(notificationPayload.appointmentId, "appointment-1");
+  assert.equal(notificationPayload.title, "Appointment booked");
 });
 
 test("cancelAppointment marks the appointment cancelled and removes it from today's queue", async () => {
   const appointment = {
     patientId: { toString: () => "patient-1" },
     doctorId: "doctor-1",
+    _id: "appointment-1",
     status: AppointmentStatus.CONFIRMED,
     cancelledAt: undefined as Date | undefined,
     saveCalled: false,
@@ -109,9 +121,14 @@ test("cancelAppointment marks the appointment cancelled and removes it from toda
       this.saveCalled = true;
     },
   };
+  let notificationPayload: any;
 
   (AppointmentModel.findById as any) = async () => appointment;
   (QueueModel.findOne as any) = async () => queue;
+  (NotificationModel.create as any) = async (payload: any) => {
+    notificationPayload = payload;
+    return payload;
+  };
 
   const req = {
     user: { _id: { toString: () => "patient-1" } },
@@ -127,6 +144,7 @@ test("cancelAppointment marks the appointment cancelled and removes it from toda
   assert.equal(appointment.saveCalled, true);
   assert.equal(queue.entries.length, 1);
   assert.equal(queue.saveCalled, true);
+  assert.equal(notificationPayload.title, "Appointment cancelled");
   assert.deepEqual(res.body, { message: "Appointment cancelled successfully" });
 });
 

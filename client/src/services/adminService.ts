@@ -21,7 +21,7 @@ export const getSystemStats = async (): Promise<SystemStats> => {
 };
 
 export const getAllDoctors = async (): Promise<Doctor[]> => {
-  const response = await api.get<Doctor[]>('/patient/doctors'); // Reuse patient doctor list or create admin one
+  const response = await api.get<Doctor[]>('/admin/doctors');
   return response.data;
 };
 
@@ -44,10 +44,10 @@ export const getAllPatients = async (query: string = '', sortBy: string = 'newes
 };
 
 export const getConflicts = async (): Promise<SchedulingConflict[]> => {
-  // Logic if implemented
-  return [];
+  const response = await api.get<SchedulingConflict[]>('/admin/conflicts');
+  return response.data;
 };
 
-export const resolveConflict = async (_conflictId: string): Promise<void> => {
-  // Logic if implemented
+export const resolveConflict = async (conflictId: string): Promise<void> => {
+  await api.post(`/admin/conflicts/${conflictId}/resolve`);
 };

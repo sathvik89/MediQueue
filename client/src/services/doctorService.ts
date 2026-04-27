@@ -33,7 +33,7 @@ export const getQueueStrategy = async (): Promise<QueueStrategy> => {
 };
 
 export const getDoctorStatus = async (): Promise<AvailabilityStatus> => {
-  const response = await api.get<{ status: AvailabilityStatus }>('/auth/me'); // Or a specialized endpoint
+  const response = await api.get<{ status: AvailabilityStatus }>('/doctor/status');
   return response.data.status || 'AVAILABLE';
 };
 

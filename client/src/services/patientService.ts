@@ -14,13 +14,13 @@ export const getAppointments = async (): Promise<Appointment[]> => {
 };
 
 export const getNotifications = async (): Promise<Notification[]> => {
-  // Mock notifications for now as notification system might not be fully in DB
-  return []; 
+  const response = await api.get<Notification[]>('/patient/notifications');
+  return response.data;
 };
 
 export const getMedicalHistory = async (): Promise<MedicalRecord[]> => {
-  // Fetch from DB if available
-  return [];
+  const response = await api.get<MedicalRecord[]>('/patient/medical-history');
+  return response.data;
 };
 
 export const getQueueStatus = async (): Promise<QueueStatus | null> => {
@@ -46,6 +46,6 @@ export const cancelAppointment = async (appointmentId: string): Promise<void> =>
   await api.delete(`/patient/appointments/${appointmentId}`);
 };
 
-export const markNotificationRead = async (_notificationId: string): Promise<void> => {
-  // Logic if needed
+export const markNotificationRead = async (notificationId: string): Promise<void> => {
+  await api.patch(`/patient/notifications/${notificationId}/read`);
 };

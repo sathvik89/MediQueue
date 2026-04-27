@@ -3,6 +3,9 @@ import {
   getDoctors,
   bookAppointment,
   getMyAppointments,
+  getMyNotifications,
+  markNotificationRead,
+  getMedicalHistory,
   getQueueStatus,
   cancelAppointment,
 } from "../controllers/patient_controller";
@@ -19,5 +22,8 @@ router.post("/appointments", bookAppointment);
 router.get("/appointments", getMyAppointments);
 router.delete("/appointments/:id", cancelAppointment);
 router.get("/queue-status", getQueueStatus);
+router.get("/notifications", getMyNotifications);
+router.patch("/notifications/:id/read", markNotificationRead);
+router.get("/medical-history", getMedicalHistory);
 
 export default router;

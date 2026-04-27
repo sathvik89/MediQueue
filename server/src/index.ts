@@ -6,6 +6,7 @@ import connectDB from "./config/db";
 import authRoutes from "./routes/auth_routes";
 import doctorRoutes from "./routes/doctor_routes";
 import patientRoutes from "./routes/patient_routes";
+import adminRoutes from "./routes/admin_routes";
 
 dotenv.config();
 connectDB();
@@ -42,6 +43,7 @@ app.get("/", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/doctor", doctorRoutes);
 app.use("/api/patient", patientRoutes);
+app.use("/api/admin", adminRoutes);
 
 // ── 404 Handler ──────────────────────────────────────────────────
 app.use((_req, res) => {

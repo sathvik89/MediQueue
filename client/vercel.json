@@ -1,4 +1,7 @@
 {
+  "env": {
+    "VITE_API_URL": "https://mediqueue-8ofq.onrender.com/api"
+  },
   "rewrites": [
     {
       "source": "/(.*)",
@@ -6,4 +9,3 @@
     }
   ]
 }
-
