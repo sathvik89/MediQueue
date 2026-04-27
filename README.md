@@ -160,7 +160,7 @@ npx tsx src/seed.ts
 
 ## Testing
 
-The first batch of automated backend tests is available in `server/tests`. These tests use Node's built-in test runner through `tsx`, so they can run TypeScript test files directly.
+The automated backend tests are available in `server/tests`. These tests use Node's built-in test runner through `tsx`, so they can run TypeScript test files directly. The tests mock Mongoose model calls, which keeps them fast and allows the controller logic to be checked without starting Express or connecting to MongoDB.
 
 Run the tests:
 
@@ -172,8 +172,8 @@ npm test
 Current verified result:
 
 ```text
-tests 10
-pass 10
+tests 15
+pass 15
 fail 0
 ```
 
@@ -183,10 +183,22 @@ fail 0
 | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `server/tests/appointment_factory.test.ts` | Verifies that `AppointmentFactoryProvider` returns the correct factory for walk-in, scheduled, and emergency appointments. It also checks that scheduled appointments default to normal priority and emergency appointments default to critical priority. |
 | `server/tests/auth_middleware.test.ts`     | Verifies authentication and role-authorization behavior. It checks that missing bearer tokens are rejected, valid JWTs attach the authenticated user to the request, and incorrect roles receive a forbidden response.                                    |
+| `server/tests/patient_controller.test.ts`  | Verifies patient appointment flows. It checks booking today's appointment, adding the appointment to the queue, assigning a token number, cancelling an appointment, removing it from the queue, and calculating queue status.                           |
+| `server/tests/doctor_controller.test.ts`   | Verifies doctor workflow behavior. It checks that the doctor queue is formatted for the dashboard and that consultation completion updates the appointment, queue entry, and medical record.                                                              |
 | `server/tests/queue_strategy.test.ts`      | Verifies queue ordering rules. It checks FIFO ordering by check-in time, priority ordering by case severity, priority tie-breaking by check-in time, and round-robin rotation across repeated calls.                                                      |
-| `server/tests/README.md`                   | Documents the backend test cases, expected results, current pass/fail status                                                                                                                                                                              |
+| `server/tests/helpers/mock_response.ts`    | Provides a lightweight mock Express response object used by controller and middleware tests.                                                                                                                                                              |
+| `server/tests/README.md`                   | Documents the backend test cases, expected results, current pass/fail status, and possible future testing improvements.                                                                                                                                   |
 
-The next planned test batch will cover patient appointment booking, appointment cancellation, patient queue status, doctor queue handling, and consultation completion.
+### Test Coverage Summary
+
+| Area | Covered Scenarios |
+| --- | --- |
+| Appointment creation | Factory selection, scheduled appointment defaults, emergency appointment defaults |
+| Authentication | Missing bearer token, valid JWT handling, request user attachment |
+| Authorization | Allowed role passes, incorrect role receives forbidden response |
+| Patient workflow | Appointment booking, queue token assignment, appointment cancellation, queue removal, queue status calculation |
+| Doctor workflow | Queue formatting, consultation completion, medical record creation |
+| Queue logic | FIFO ordering, priority ordering, priority tie-breaking, round-robin rotation |
 
 ## Architecture
 
