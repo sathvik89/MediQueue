@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import type { Role } from '../types';
 import { User, Stethoscope, ShieldCheck, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MEDICAL_SPECIALTIES } from '../constants/specialties';
 
 export const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -31,6 +32,24 @@ export const Register: React.FC = () => {
       if (!name || !email || !phone || !password) {
         throw new Error('Please fill all required fields');
       }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        throw new Error('Please enter a valid email address');
+      }
+
+      // Phone validation
+      const phoneRegex = /^\d{10}$/;
+      if (!phoneRegex.test(phone)) {
+        throw new Error('Phone number must be exactly 10 digits');
+      }
+
+      // Password validation
+      if (password.length < 6) {
+        throw new Error('Password must be at least 6 characters long');
+      }
+
       if (role === 'doctor' && !specialty.trim()) {
         throw new Error('Please enter your medical specialty');
       }
@@ -147,6 +166,8 @@ export const Register: React.FC = () => {
           required
         />
 
+import { MEDICAL_SPECIALTIES } from '../constants/specialties';
+...
         {/* Specialty — visible only when registering as Doctor */}
         <AnimatePresence>
           {role === 'doctor' && (
@@ -155,16 +176,33 @@ export const Register: React.FC = () => {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.25 }}
-              style={{ overflow: 'hidden' }}
+              style={{ overflow: 'hidden', marginBottom: '1.25rem' }}
             >
-              <Input
-                label="Medical Specialty"
-                type="text"
-                placeholder="e.g. Cardiology, Neurology…"
-                value={specialty}
-                onChange={(e) => setSpecialty(e.target.value)}
-                required={role === 'doctor'}
-              />
+              <div className="input-group">
+                <label className="input-label">Medical Specialty</label>
+                <select
+                  className="auth-select"
+                  value={specialty}
+                  onChange={(e) => setSpecialty(e.target.value)}
+                  required={role === 'doctor'}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    borderRadius: '0.625rem',
+                    border: '1px solid var(--border)',
+                    background: 'var(--bg-color)',
+                    color: 'var(--text-dark)',
+                    fontSize: '0.875rem',
+                    outline: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="">Select your specialty</option>
+                  {MEDICAL_SPECIALTIES.map(s => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
