@@ -5,13 +5,14 @@ import { DashboardLayout } from '../../layouts/DashboardLayout';
 import { DoctorQueueList } from '../../components/doctor/DoctorQueueList';
 import { PatientConsultationPanel } from '../../components/doctor/PatientConsultationPanel';
 import { AvailabilityControl } from '../../components/doctor/AvailabilityControl';
-import { PageHeader, StatCard } from '../../components/ui/index';
+import { PageHeader, StatCard, Skeleton } from '../../components/ui/index';
 import { StatusBadge } from '../../components/ui/StatusBadge';
 import {
   getDoctorQueue, callNextPatient, completeConsultation, skipPatient,
   flagCriticalCase, setQueueStrategy, getQueueStrategy,
-  getDoctorStatus, setDoctorStatus, getWorkloadSummary
+  getDoctorStatus, setDoctorStatus, getWorkloadSummary, getPatientHistory
 } from '../../services/doctorService';
+import { PatientHistoryModal } from '../../components/doctor/PatientHistoryModal';
 import { useAuth } from '../../context/AuthContext';
 import type { PatientConsultation, WorkloadSummary, QueueStrategy, AvailabilityStatus } from '../../types';
 import './index.css';
@@ -44,6 +45,25 @@ export const DoctorDashboard: React.FC = () => {
   const [callingNext, setCallingNext] = useState(false);
   const [statusLoading, setStatusLoading] = useState(false);
 
+  // History State
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const [historyData, setHistoryData] = useState<any[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+
+  const handleViewHistory = async () => {
+    if (!activePatient) return;
+    setIsHistoryModalOpen(true);
+    setLoadingHistory(true);
+    try {
+      const history = await getPatientHistory(activePatient.patientId);
+      setHistoryData(history);
+    } catch {
+      toast.error('Failed to load patient history');
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
+
   const fetchAll = useCallback(async () => {
     try {
       const [q, strat, status, wl] = await Promise.all([
@@ -62,7 +82,9 @@ export const DoctorDashboard: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => { fetchAll(); }, [fetchAll]);
+  useEffect(() => { 
+    fetchAll(); 
+  }, [fetchAll]);
 
   const handleCallNext = async () => {
     setCallingNext(true);
@@ -146,12 +168,19 @@ export const DoctorDashboard: React.FC = () => {
 
   if (loadingQueue) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-color)' }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ width: 48, height: 48, borderRadius: '50%', border: '3px solid var(--primary)', borderTopColor: 'transparent', animation: 'spin 0.8s linear infinite', margin: '0 auto 1rem' }} />
-          <div style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>Loading your dashboard...</div>
+      <DashboardLayout navItems={NAV_ITEMS} activeNav={activeTab} onNavChange={(id) => setActiveTab(id as TabId)} pageTitle={PAGE_TITLES[activeTab]}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', padding: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem' }}>
+            <Skeleton height="100px" />
+            <Skeleton height="100px" />
+            <Skeleton height="100px" />
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem' }}>
+            <Skeleton height="500px" />
+            <Skeleton height="500px" />
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     );
   }
 
@@ -200,11 +229,24 @@ export const DoctorDashboard: React.FC = () => {
             />
             <div>
               <PageHeader title="Consultation Panel" subtitle={activePatient ? `Active: ${activePatient.patientName}` : 'No active patient'} />
-              <PatientConsultationPanel patient={activePatient} onComplete={handleComplete} />
+              <PatientConsultationPanel 
+                patient={activePatient} 
+                onComplete={handleComplete} 
+                onViewHistory={handleViewHistory}
+              />
             </div>
           </div>
         </div>
       )}
+
+      {/* Modals */}
+      <PatientHistoryModal 
+        isOpen={isHistoryModalOpen}
+        onClose={() => setIsHistoryModalOpen(false)}
+        patientName={activePatient?.patientName || ''}
+        history={historyData}
+        isLoading={loadingHistory}
+      />
 
       {/* ─── Availability ──────────────────────────────────────── */}
       {activeTab === 'availability' && (
