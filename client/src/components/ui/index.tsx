@@ -78,3 +78,26 @@ export const StatCard: React.FC<StatCardProps> = ({ label, value, sublabel, icon
     </div>
   </div>
 );
+
+interface SkeletonProps {
+  width?: string | number;
+  height?: string | number;
+  borderRadius?: string;
+  style?: React.CSSProperties;
+}
+export const Skeleton: React.FC<SkeletonProps> = ({ width = '100%', height = '1rem', borderRadius = '0.5rem', style }) => (
+  <div style={{
+    width, height, borderRadius,
+    background: 'linear-gradient(90deg, var(--border) 25%, var(--bg-color) 50%, var(--border) 75%)',
+    backgroundSize: '200% 100%',
+    animation: 'shimmer 1.5s infinite linear',
+    ...style
+  }}>
+    <style>{`
+      @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+    `}</style>
+  </div>
+);

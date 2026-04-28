@@ -26,8 +26,6 @@ export const QueueWidget: React.FC = () => {
 
   useEffect(() => {
     fetchStatus();
-    const id = setInterval(() => fetchStatus(), 12000);
-    return () => clearInterval(id);
   }, [fetchStatus]);
 
   if (loading) {

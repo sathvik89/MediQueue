@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { Input } from '../Input';
 import { Button } from '../Button';
+import { MEDICAL_SPECIALTIES } from '../../constants/specialties';
 
 interface AddDoctorModalProps {
   isOpen: boolean;
@@ -50,13 +51,30 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({ isOpen, onClose,
               onChange={e => setName(e.target.value)} 
               required 
             />
-            <Input 
-              label="Specialty" 
-              placeholder="e.g., Pediatrics" 
-              value={specialty} 
-              onChange={e => setSpecialty(e.target.value)} 
-              required 
-            />
+            <div className="input-group" style={{ marginBottom: '1rem' }}>
+              <label className="input-label" style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-dark)' }}>Specialty</label>
+              <select
+                value={specialty}
+                onChange={e => setSpecialty(e.target.value)}
+                required
+                style={{
+                  width: '100%',
+                  padding: '0.625rem 1rem',
+                  borderRadius: '0.5rem',
+                  border: '1px solid var(--border)',
+                  background: 'var(--bg-color)',
+                  color: 'var(--text-dark)',
+                  fontSize: '0.875rem',
+                  outline: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                <option value="">Select specialty</option>
+                {MEDICAL_SPECIALTIES.map(s => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="modal-footer">

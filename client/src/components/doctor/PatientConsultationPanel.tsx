@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { User, Clock, FileText, AlertTriangle, Pill, X, Plus, Calendar } from 'lucide-react';
+import { User, Clock, FileText, AlertTriangle, Pill, X, Plus, Calendar, History } from 'lucide-react';
 import type { PatientConsultation } from '../../types';
 
 interface PatientConsultationPanelProps {
   patient: PatientConsultation | null;
   onComplete: (data: { medicines: string[]; diagnosis: string; notes: string; followUpDate?: string; isCritical: boolean }) => Promise<void>;
+  onViewHistory: () => void;
 }
 
-export const PatientConsultationPanel: React.FC<PatientConsultationPanelProps> = ({ patient, onComplete }) => {
+export const PatientConsultationPanel: React.FC<PatientConsultationPanelProps> = ({ patient, onComplete, onViewHistory }) => {
   const [medicines, setMedicines] = useState<string[]>([]);
   const [medInput, setMedInput] = useState('');
   const [diagnosis, setDiagnosis] = useState('');
@@ -68,6 +69,13 @@ export const PatientConsultationPanel: React.FC<PatientConsultationPanelProps> =
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}><Clock size={12} /> {patient.timeSlot}</span>
               <span>Token #{patient.tokenNumber}</span>
             </div>
+          </div>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.5rem' }}>
+            <button type="button" onClick={onViewHistory} title="View Medical History"
+              style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '0.5rem', padding: '0.5rem', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', fontWeight: 600 }}>
+              <History size={16} />
+              History
+            </button>
           </div>
         </div>
         {patient.issues && (
