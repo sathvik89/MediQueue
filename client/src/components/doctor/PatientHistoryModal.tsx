@@ -1,6 +1,6 @@
 import React from 'react';
-import { X, Calendar, User, FileText, Pill } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { X, Calendar, FileText } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface PatientHistoryModalProps {
   isOpen: boolean;
@@ -45,7 +45,7 @@ export const PatientHistoryModal: React.FC<PatientHistoryModalProps> = ({
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>This patient doesn't have any previous consultation records in our system.</p>
             </div>
           ) : (
-            history.map((record, index) => (
+            history.map((record) => (
               <div key={record.id} style={{ border: '1px solid var(--border)', borderRadius: '0.875rem', overflow: 'hidden' }}>
                 <div style={{ background: 'var(--bg-color)', padding: '0.875rem 1.25rem', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 700, fontSize: '0.875rem', color: 'var(--text-dark)' }}>
