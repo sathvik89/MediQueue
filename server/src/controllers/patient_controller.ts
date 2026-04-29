@@ -164,6 +164,79 @@ export const getQueueStatus = async (req: any, res: Response): Promise<void> => 
   }
 };
 
+export const getMedicalHistory = async (req: any, res: Response): Promise<void> => {
+  try {
+    const patientId = req.user._id;
+    const history = await MedicalRecordModel.find({ patientId })
+      .populate("doctorId", "name specialization")
+      .sort({ createdAt: -1 });
+
+    const formatted = history.map(h => ({
+      id: h._id,
+      date: h.createdAt.toISOString().split('T')[0],
+      doctorName: (h.doctorId as any).name,
+      specialty: (h.doctorId as any).specialization,
+      diagnosis: h.diagnosis,
+      prescription: h.prescription.medicines,
+      notes: h.notes,
+    }));
+
+    res.status(200).json(formatted);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching medical history" });
+  }
+};
+
+export const getNotifications = async (req: any, res: Response): Promise<void> => {
+  try {
+    const patientId = req.user._id;
+    const notifications = await NotificationModel.find({ userId: patientId })
+      .sort({ createdAt: -1 })
+      .limit(20);
+
+    res.status(200).json(notifications);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching notifications" });
+  }
+};
+
+export const rescheduleAppointment = async (req: any, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { date, time } = req.body;
+    const patientId = req.user._id;
+
+    const appointment = await AppointmentModel.findById(id);
+    if (!appointment) {
+      res.status(404).json({ message: "Appointment not found" });
+      return;
+    }
+
+    if (appointment.patientId.toString() !== patientId.toString()) {
+      res.status(403).json({ message: "Unauthorized" });
+      return;
+    }
+
+    const startTime = new Date(`${date}T${time}`);
+    const endTime = new Date(startTime.getTime() + 30 * 60000);
+
+    appointment.timeSlot = { startTime, endTime };
+    // If it's being rescheduled, reset status to confirmed if it was cancelled
+    if (appointment.status === AppointmentStatus.CANCELLED) {
+      appointment.status = AppointmentStatus.CONFIRMED;
+    }
+    
+    await appointment.save();
+
+    // Note: In a real system, we might need to handle queue removal/addition here if the date changes
+    // to/from "today". For simplicity, we'll assume the user books correctly.
+
+    res.status(200).json(appointment);
+  } catch (error) {
+    res.status(500).json({ message: "Error rescheduling appointment" });
+  }
+};
+
 export const cancelAppointment = async (req: any, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
