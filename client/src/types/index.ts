@@ -138,6 +138,7 @@ export interface WorkloadSummary {
 // ─── Legacy (used by existing components, kept for compat) ───────
 export interface PatientConsultation {
   id: string;
+  patientId: string;
   patientName: string;
   timeSlot: string;
   status: 'waiting' | 'in-progress' | 'completed';
