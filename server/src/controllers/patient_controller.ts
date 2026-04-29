@@ -177,7 +177,7 @@ export const getMedicalHistory = async (req: any, res: Response): Promise<void> 
       doctorName: (h.doctorId as any).name,
       specialty: (h.doctorId as any).specialization,
       diagnosis: h.diagnosis,
-      prescription: h.prescription.medicines,
+      prescription: h.prescription?.medicines || [],
       notes: h.notes,
     }));
 
