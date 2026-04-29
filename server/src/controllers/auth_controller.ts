@@ -16,6 +16,26 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      res.status(400).json({ message: "Please provide a valid email address." });
+      return;
+    }
+
+    // Password validation (min 6 characters)
+    if (password.length < 6) {
+      res.status(400).json({ message: "Password must be at least 6 characters long." });
+      return;
+    }
+
+    // Phone number validation (exactly 10 digits)
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone)) {
+      res.status(400).json({ message: "Phone number must be exactly 10 digits." });
+      return;
+    }
+
     const requestedRole = (role ? role.toUpperCase() : UserRole.PATIENT) as UserRole;
 
     const existingUser = await UserModel.findOne({ email });
