@@ -28,6 +28,7 @@ export const getDoctorQueue = async (req: any, res: Response): Promise<void> => 
     // Map to frontend format
     const formattedQueue = queue.entries.map((entry: any) => ({
       id: entry.appointmentId._id.toString(),
+      patientId: entry.patientId?._id.toString(),
       patientName: entry.patientId?.name || "Unknown",
       timeSlot: "N/A",
       status: entry.status === QueueEntryStatus.DONE ? "completed" : String(entry.status).toLowerCase().replace("_", "-"),
@@ -119,14 +120,88 @@ export const callNextPatient = async (req: any, res: Response): Promise<void> =>
     await AppointmentModel.findByIdAndUpdate(nextPatient.appointmentId, { status: AppointmentStatus.IN_CONSULTATION });
     await queue.save();
 
+    const patientUser = await UserModel.findById(nextPatient.patientId).select("name");
+    const patientName = patientUser ? patientUser.name : "Unknown";
+
     res.status(200).json({
       id: nextPatient.appointmentId.toString(),
-      patientName: "Patient", // Need to populate if name is needed
+      patientId: nextPatient.patientId.toString(),
+      patientName,
       status: "in-progress",
       tokenNumber: nextPatient.tokenNumber,
     });
   } catch (error) {
     res.status(500).json({ message: "Error calling next patient" });
+  }
+};
+
+export const skipPatient = async (req: any, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params; // appointmentId
+    const doctorId = req.user._id;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const queue = await QueueModel.findOne({ doctorId, queueDate: { $gte: today } });
+    if (!queue) {
+      res.status(404).json({ message: "Queue not found" });
+      return;
+    }
+
+    const entryIndex = queue.entries.findIndex(e => e.appointmentId.toString() === id);
+    if (entryIndex === -1) {
+      res.status(404).json({ message: "Patient not found in queue" });
+      return;
+    }
+
+    // Move this patient to the end of the WAITING list by changing their checkedInAt time or simply moving them in the array.
+    // For simplicity, let's update their token number to be the last one + 1, and set status to WAITING
+    const entry = queue.entries[entryIndex];
+    if (entry.status !== QueueEntryStatus.DONE) {
+      const maxToken = Math.max(...queue.entries.map(e => e.tokenNumber));
+      entry.tokenNumber = maxToken + 1;
+      entry.status = QueueEntryStatus.WAITING;
+      
+      // Also update the appointment status if needed
+      await AppointmentModel.findByIdAndUpdate(entry.appointmentId, { status: AppointmentStatus.IN_QUEUE });
+      
+      await queue.save();
+    }
+
+    res.status(200).json({ message: "Patient skipped successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error skipping patient" });
+  }
+};
+
+export const flagCriticalCase = async (req: any, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params; // appointmentId
+    const doctorId = req.user._id;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const queue = await QueueModel.findOne({ doctorId, queueDate: { $gte: today } });
+    if (!queue) {
+      res.status(404).json({ message: "Queue not found" });
+      return;
+    }
+
+    const entryIndex = queue.entries.findIndex(e => e.appointmentId.toString() === id);
+    if (entryIndex === -1) {
+      res.status(404).json({ message: "Patient not found in queue" });
+      return;
+    }
+
+    // Update priority to 4 (CRITICAL)
+    queue.entries[entryIndex].priority = 4;
+    await queue.save();
+
+    await AppointmentModel.findByIdAndUpdate(id, { priority: 4 });
+
+    res.status(200).json({ message: "Case flagged as critical" });
+  } catch (error) {
+    res.status(500).json({ message: "Error flagging case" });
   }
 };
 
@@ -178,6 +253,29 @@ export const completeConsultation = async (req: any, res: Response): Promise<voi
   } catch (error) {
     console.error("completeConsultation error:", error);
     res.status(500).json({ message: "Error completing consultation" });
+  }
+};
+
+export const getPatientHistory = async (req: any, res: Response): Promise<void> => {
+  try {
+    const { patientId } = req.params;
+    const history = await MedicalRecordModel.find({ patientId })
+      .populate("doctorId", "name specialization")
+      .sort({ createdAt: -1 });
+
+    const formatted = history.map(h => ({
+      id: h._id,
+      date: h.createdAt.toISOString().split('T')[0],
+      doctorName: (h.doctorId as any).name,
+      specialty: (h.doctorId as any).specialization,
+      diagnosis: h.diagnosis,
+      prescription: h.prescription?.medicines || [],
+      notes: h.notes,
+    }));
+
+    res.status(200).json(formatted);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching patient history" });
   }
 };
 
