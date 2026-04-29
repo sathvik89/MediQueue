@@ -54,3 +54,8 @@ export const getAvailability = async (): Promise<string[]> => {
 export const updateAvailability = async (_slots: string[]): Promise<void> => {
   // Logic to update slots if backend supports it
 };
+
+export const getPatientHistory = async (patientId: string): Promise<any[]> => {
+  const response = await api.get<any[]>(`/doctor/patient-history/${patientId}`);
+  return response.data;
+};

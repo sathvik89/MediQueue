@@ -6,6 +6,9 @@ export interface SystemStats {
   activeDoctors: number;
   averageWaitTime: number; // in minutes
   totalAppointments: number;
+  totalPatients: number;
+  appointmentTrends: { date: string; count: number }[];
+  distribution: { name: string; value: number }[];
 }
 
 export interface SchedulingConflict {
@@ -21,7 +24,7 @@ export const getSystemStats = async (): Promise<SystemStats> => {
 };
 
 export const getAllDoctors = async (): Promise<Doctor[]> => {
-  const response = await api.get<Doctor[]>('/patient/doctors'); // Reuse patient doctor list or create admin one
+  const response = await api.get<Doctor[]>('/admin/doctors');
   return response.data;
 };
 
