@@ -166,8 +166,7 @@ export const Register: React.FC = () => {
           required
         />
 
-import { MEDICAL_SPECIALTIES } from '../constants/specialties';
-...
+
         {/* Specialty — visible only when registering as Doctor */}
         <AnimatePresence>
           {role === 'doctor' && (
